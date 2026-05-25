@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - JAGWAR HOST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #0077ff;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #0077ff, #00ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 2rem 2rem;
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, rgba(0, 119, 255, 0.1), rgba(0, 0, 0, 0.5));
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 119, 255, 0.3);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .create-server-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 119, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #0077ff;
+        }
+
+        button {
+            background: linear-gradient(135deg, #0077ff, #0055cc);
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .server-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 119, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .server-card:hover {
+            transform: translateY(-5px);
+            border-color: #0077ff;
+            box-shadow: 0 10px 30px rgba(0, 119, 255, 0.2);
+        }
+
+        .server-status {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-running {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+
+        .status-stopped {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
+
+        .server-stats {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0077ff;
+        }
+
+        .btn-control {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            margin: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-control:hover {
+            background: #0077ff;
+        }
+
+        .delete-server {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">JAGWAR<span style="color:#ff6600">HOST</span></div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <span>👋 {{ user.username }}</span>
+            {% if user.is_premium %}
+            <span class="premium-badge">⭐ PREMIUM</span>
+            {% endif %}
+            <a href="/logout" style="color: #ff4444; text-decoration: none;">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1>Welcome back, {{ user.username }}! 👋</h1>
+            <p>You have <strong>{{ servers|length }}</strong> / <strong>{{ max_servers }}</strong> servers active.</p>
+            {% if remaining > 0 %}
+            <p>✅ You can create <strong>{{ remaining }}</strong> more server(s).</p>
+            {% else %}
+            <p>⚠️ You have reached your server limit. Upgrade to Premium for more!</p>
+            {% endif %}
+        </div>
+
+        {% if remaining > 0 %}
+        <div class="create-server-card">
+            <h2>🚀 Create New Server</h2>
+            <div class="form-group">
+                <input type="text" id="server-name" placeholder="Server Name (e.g., MyBot, API Server)">
+            </div>
+            <div class="form-group">
+                <textarea id="server-description" rows="3" placeholder="Description (what does this server do?)"></textarea>
+            </div>
+            <div class="form-group">
+                <select id="server-language" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid #333; border-radius: 10px; color: white;">
+                    <option value="Python" selected>🐍 Python 3.11</option>
+                </select>
+            </div>
+            <button onclick="createServer()">✨ Create Server</button>
+        </div>
+        {% endif %}
+
+        <h2>📦 My Servers</h2>
+        <div class="servers-grid" id="servers-grid">
+            {% for server in servers %}
+            <div class="server-card" data-server-id="{{ server.id }}">
+                <h3>{{ server.name }}</h3>
+                <p style="color: #aaa; font-size: 0.9rem;">{{ server.description[:100] }}</p>
+                <div class="server-stats">
+                    <div class="stat">
+                        <div class="stat-value">{{ server.usage_cpu }}%</div>
+                        <div>CPU</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">{{ server.usage_memory }}%</div>
+                        <div>RAM</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">{{ server.language }}</div>
+                        <div>Language</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                    <span class="server-status status-{{ server.status }}">
+                        {{ server.status|upper }}
+                    </span>
+                    <div>
+                        <button class="btn-control" onclick="window.location.href='/server/{{ server.id }}'">🔧 Manage</button>
+                        <button class="btn-control delete-server" onclick="deleteServer('{{ server.id }}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="footer">
+            جميع الحقوق محفوظة JAGWAR 2026
+        </div>
+    </div>
+
+    <script>
+        function createServer() {
+            const name = document.getElementById('server-name').value;
+            const description = document.getElementById('server-description').value;
+            const language = document.getElementById('server-language').value;
+            
+            if (!name) {
+                alert('Please enter a server name');
+                return;
+            }
+            
+            fetch('/create_server', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `server_name=${encodeURIComponent(name)}&language=${encodeURIComponent(language)}&description=${encodeURIComponent(description)}`
+            }).then(res => res.json()).then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        }
+        
+        function deleteServer(serverId) {
+            if (confirm('Are you sure you want to delete this server? All files will be permanently deleted.')) {
+                fetch(`/delete_server/${serverId}`, { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert('Error deleting server');
+                        }
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
