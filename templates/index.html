@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="JAGWAR HOST - Enterprise Python Hosting Platform with Full Server Isolation">
     <meta name="theme-color" content="#0a0c0f">
-    <meta name="keywords" content="python hosting, server hosting, cloud hosting, venv isolation">
-    <meta name="author" content="JAGWAR HOST">
-    <meta property="og:title" content="JAGWAR HOST - Enterprise Python Hosting">
-    <meta property="og:description" content="Deploy isolated Python servers with dedicated virtual environments and live console streaming.">
-    <meta property="og:type" content="website">
     <title>JAGWAR HOST — Enterprise Python Hosting Platform</title>
     <style>
         :root {
@@ -20,45 +15,25 @@
             --neon-glow-strong: 0 0 60px rgba(10, 132, 255, 0.8);
             --neon-glow-subtle: 0 0 15px rgba(10, 132, 255, 0.3);
             --dark-bg: #0a0c0f;
-            --dark-bg-secondary: #0d1117;
             --dark-surface: #11151a;
-            --dark-surface-hover: #161b22;
             --dark-card: rgba(18, 22, 28, 0.85);
-            --dark-card-solid: #161b22;
             --border-glow: 1px solid rgba(10, 132, 255, 0.35);
-            --border-glow-strong: 1px solid rgba(10, 132, 255, 0.6);
-            --border-subtle: 1px solid #2d333b;
             --text-primary: #e8eaed;
             --text-secondary: #9aa0a6;
             --text-tertiary: #6b7280;
-            --text-muted: #484f58;
             --gradient-blue: linear-gradient(135deg, #0a84ff 0%, #3b9eff 50%, #0066cc 100%);
-            --gradient-blue-horizontal: linear-gradient(90deg, #0a84ff 0%, #3b9eff 100%);
-            --gradient-dark: linear-gradient(180deg, #0a0c0f 0%, #11151a 50%, #0a0c0f 100%);
-            --gradient-card: linear-gradient(135deg, rgba(18, 22, 28, 0.9) 0%, rgba(13, 17, 23, 0.95) 100%);
             --radius-xl: 2.5rem;
             --radius-lg: 2rem;
             --radius-md: 1.25rem;
             --radius-sm: 0.75rem;
-            --radius-xs: 0.5rem;
-            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --shadow-card-hover: 0 12px 48px rgba(10, 132, 255, 0.2);
             --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-medium: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-            scroll-padding-top: 80px;
-        }
+        html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: 80px; }
 
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -71,86 +46,28 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
-            letter-spacing: -0.01em;
         }
 
-        /* Animated Background Particles */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: 
-                radial-gradient(ellipse at 15% 15%, rgba(10, 132, 255, 0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 85%, rgba(10, 132, 255, 0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(10, 132, 255, 0.02) 0%, transparent 70%),
-                radial-gradient(ellipse at 30% 70%, rgba(59, 158, 255, 0.03) 0%, transparent 40%);
+                radial-gradient(ellipse at 20% 20%, rgba(10, 132, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(10, 132, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 132, 255, 0.02) 0%, transparent 70%);
             pointer-events: none;
             z-index: 0;
-            animation: bgPulse 10s ease-in-out infinite alternate;
+            animation: bgPulse 8s ease-in-out infinite alternate;
         }
 
         @keyframes bgPulse {
             0% { opacity: 0.6; }
-            25% { opacity: 0.8; }
             50% { opacity: 1; }
-            75% { opacity: 0.7; }
             100% { opacity: 0.6; }
         }
 
-        /* Floating Particles */
-        .particles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--neon-blue);
-            border-radius: 50%;
-            animation: floatUp 8s infinite ease-in;
-            opacity: 0;
-        }
-
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 8s; }
-        .particle:nth-child(2) { left: 25%; animation-delay: 1s; animation-duration: 10s; }
-        .particle:nth-child(3) { left: 40%; animation-delay: 2s; animation-duration: 7s; }
-        .particle:nth-child(4) { left: 55%; animation-delay: 0.5s; animation-duration: 9s; }
-        .particle:nth-child(5) { left: 70%; animation-delay: 1.5s; animation-duration: 11s; }
-        .particle:nth-child(6) { left: 85%; animation-delay: 3s; animation-duration: 8s; }
-        .particle:nth-child(7) { left: 15%; animation-delay: 2.5s; animation-duration: 12s; }
-        .particle:nth-child(8) { left: 60%; animation-delay: 4s; animation-duration: 6s; }
-        .particle:nth-child(9) { left: 35%; animation-delay: 1.8s; animation-duration: 9s; }
-        .particle:nth-child(10) { left: 80%; animation-delay: 3.5s; animation-duration: 10s; }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.2;
-            }
-            100% {
-                transform: translateY(-10vh) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        /* ==================== NAVBAR ==================== */
+        /* ========== NAVBAR ========== */
         .navbar {
             position: sticky;
             top: 0;
@@ -159,17 +76,11 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 6%;
-            background: rgba(13, 17, 23, 0.8);
+            background: rgba(15, 18, 24, 0.8);
             backdrop-filter: blur(28px) saturate(180%);
             -webkit-backdrop-filter: blur(28px) saturate(180%);
             border-bottom: 1px solid rgba(10, 132, 255, 0.2);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transition: all var(--transition-medium);
-        }
-
-        .navbar.scrolled {
-            background: rgba(10, 12, 15, 0.95);
-            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.7);
         }
 
         .logo-container {
@@ -177,12 +88,6 @@
             align-items: center;
             gap: 0.75rem;
             text-decoration: none;
-        }
-
-        .logo-icon-wrapper {
-            position: relative;
-            width: 46px;
-            height: 46px;
         }
 
         .logo-icon {
@@ -194,31 +99,13 @@
             align-items: center;
             justify-content: center;
             font-size: 1.6rem;
-            position: relative;
-            z-index: 1;
             box-shadow: var(--neon-glow);
-            animation: logoGlow 3s ease-in-out infinite;
-            transition: all var(--transition-medium);
-        }
-
-        .logo-icon::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 17px;
-            background: var(--gradient-blue);
-            opacity: 0.3;
-            z-index: -1;
             animation: logoGlow 3s ease-in-out infinite;
         }
 
         @keyframes logoGlow {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(10, 132, 255, 0.4);
-            }
-            50% { 
-                box-shadow: 0 0 45px rgba(10, 132, 255, 0.9);
-            }
+            0%, 100% { box-shadow: 0 0 20px rgba(10, 132, 255, 0.4); }
+            50% { box-shadow: 0 0 45px rgba(10, 132, 255, 0.9); }
         }
 
         .logo-text {
@@ -230,11 +117,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             filter: drop-shadow(0 0 20px rgba(10, 132, 255, 0.4));
-            transition: all var(--transition-medium);
-        }
-
-        .logo-text:hover {
-            filter: drop-shadow(0 0 30px rgba(10, 132, 255, 0.7));
         }
 
         .nav-links {
@@ -252,7 +134,6 @@
             transition: all var(--transition-medium);
             position: relative;
             padding: 0.5rem 0;
-            letter-spacing: 0.01em;
         }
 
         .nav-link::before {
@@ -274,9 +155,7 @@
             text-shadow: 0 0 20px rgba(10, 132, 255, 0.5);
         }
 
-        .nav-link:hover::before {
-            width: 100%;
-        }
+        .nav-link:hover::before { width: 100%; }
 
         .btn-signin {
             display: inline-flex;
@@ -293,7 +172,6 @@
             transition: all var(--transition-medium);
             position: relative;
             overflow: hidden;
-            letter-spacing: 0.02em;
             cursor: pointer;
         }
 
@@ -304,7 +182,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: var(--gradient-blue-horizontal);
+            background: linear-gradient(90deg, #0a84ff 0%, #3b9eff 100%);
             transition: left var(--transition-medium);
             z-index: -1;
         }
@@ -316,30 +194,9 @@
             transform: translateY(-2px);
         }
 
-        .btn-signin:hover::before {
-            left: 0;
-        }
+        .btn-signin:hover::before { left: 0; }
 
-        .btn-signin svg {
-            transition: transform var(--transition-fast);
-        }
-
-        .btn-signin:hover svg {
-            transform: translateX(3px);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        /* ==================== HERO SECTION ==================== */
+        /* ========== HERO ========== */
         .hero {
             position: relative;
             z-index: 1;
@@ -352,25 +209,8 @@
         }
 
         @keyframes fadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(50px); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0); 
-            }
-        }
-
-        @keyframes fadeInScale {
-            from { 
-                opacity: 0; 
-                transform: scale(0.95); 
-            }
-            to { 
-                opacity: 1; 
-                transform: scale(1); 
-            }
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .hero-badge {
@@ -385,8 +225,6 @@
             color: var(--neon-blue);
             margin-bottom: 2.5rem;
             animation: fadeInUp 1s ease 0.2s both;
-            font-weight: 500;
-            letter-spacing: 0.02em;
         }
 
         .pulse-dot {
@@ -399,14 +237,8 @@
         }
 
         @keyframes pulse {
-            0%, 100% { 
-                opacity: 1; 
-                transform: scale(1); 
-            }
-            50% { 
-                opacity: 0.4; 
-                transform: scale(1.8); 
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.8); }
         }
 
         .hero-title {
@@ -425,7 +257,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: shimmer 5s linear infinite;
-            display: inline-block;
         }
 
         @keyframes shimmer {
@@ -466,7 +297,6 @@
             cursor: pointer;
             transition: all var(--transition-medium);
             box-shadow: var(--neon-glow);
-            letter-spacing: 0.02em;
             position: relative;
             overflow: hidden;
         }
@@ -474,10 +304,8 @@
         .btn-primary::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             transform: translate(-50%, -50%);
@@ -492,14 +320,6 @@
         .btn-primary:hover::after {
             width: 300px;
             height: 300px;
-        }
-
-        .btn-primary svg {
-            transition: transform var(--transition-fast);
-        }
-
-        .btn-primary:hover svg {
-            transform: translateX(4px);
         }
 
         .btn-outline {
@@ -521,7 +341,7 @@
             transform: translateY(-2px);
         }
 
-        /* ==================== FEATURES SECTION ==================== */
+        /* ========== FEATURES ========== */
         .section-container {
             position: relative;
             z-index: 1;
@@ -535,21 +355,17 @@
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 700;
             margin: 5rem 0 3.5rem;
-            position: relative;
-            z-index: 1;
             letter-spacing: -0.02em;
         }
 
-        .section-title span {
-            color: var(--neon-blue);
-        }
+        .section-title span { color: var(--neon-blue); }
 
         .section-title::after {
             content: '';
             display: block;
             width: 80px;
             height: 3px;
-            background: var(--gradient-blue-horizontal);
+            background: linear-gradient(90deg, #0a84ff 0%, #3b9eff 100%);
             margin: 1rem auto 0;
             border-radius: 3px;
             box-shadow: var(--neon-glow);
@@ -572,29 +388,14 @@
             transition: all var(--transition-medium);
             position: relative;
             overflow: hidden;
-            cursor: default;
         }
 
         .feature-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 2px;
-            background: var(--gradient-blue-horizontal);
-            opacity: 0;
-            transition: opacity var(--transition-medium);
-        }
-
-        .feature-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(10, 132, 255, 0.06) 0%, transparent 70%);
+            background: linear-gradient(90deg, #0a84ff 0%, #3b9eff 100%);
             opacity: 0;
             transition: opacity var(--transition-medium);
         }
@@ -605,13 +406,7 @@
             border-color: rgba(10, 132, 255, 0.6);
         }
 
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-card:hover::after {
-            opacity: 1;
-        }
+        .feature-card:hover::before { opacity: 1; }
 
         .feature-icon-wrapper {
             width: 65px;
@@ -625,8 +420,6 @@
             margin-bottom: 1.8rem;
             border: 1px solid rgba(10, 132, 255, 0.3);
             transition: all var(--transition-medium);
-            position: relative;
-            z-index: 1;
         }
 
         .feature-card:hover .feature-icon-wrapper {
@@ -640,20 +433,15 @@
             font-weight: 700;
             margin-bottom: 0.8rem;
             color: var(--text-primary);
-            position: relative;
-            z-index: 1;
-            letter-spacing: -0.01em;
         }
 
         .feature-card p {
             color: var(--text-secondary);
             font-size: 0.98rem;
             line-height: 1.7;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ==================== STATS SECTION ==================== */
+        /* ========== STATS ========== */
         .stats-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -665,23 +453,6 @@
             padding: 3.5rem 2.5rem;
             margin-bottom: 5rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-blue-horizontal);
-            opacity: 0.5;
-        }
-
-        .stat-item {
-            padding: 1rem;
         }
 
         .stat-number {
@@ -691,7 +462,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.02em;
             line-height: 1.2;
         }
 
@@ -700,44 +470,22 @@
             font-size: 1rem;
             margin-top: 0.5rem;
             font-weight: 500;
-            letter-spacing: 0.02em;
         }
 
-        /* ==================== CTA SECTION ==================== */
+        /* ========== CTA ========== */
         .cta-section {
             text-align: center;
             padding: 5rem 2rem;
-            background: var(--gradient-card);
+            background: linear-gradient(135deg, rgba(18,22,28,0.9) 0%, rgba(13,17,23,0.95) 100%);
             border-radius: var(--radius-xl);
             border: var(--border-glow);
             margin-bottom: 5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at center, rgba(10, 132, 255, 0.05) 0%, transparent 60%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .cta-section h2 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-            letter-spacing: -0.02em;
         }
 
         .cta-section p {
@@ -745,11 +493,9 @@
             font-size: 1.15rem;
             max-width: 600px;
             margin: 0 auto 2.5rem;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ==================== FOOTER ==================== */
+        /* ========== FOOTER ========== */
         .footer {
             margin-top: auto;
             background: var(--dark-surface);
@@ -778,141 +524,50 @@
             font-size: 0.9rem;
         }
 
-        .footer-links a:hover {
-            color: var(--neon-blue);
-        }
+        .footer-links a:hover { color: var(--neon-blue); }
 
-        /* ==================== RESPONSIVE ==================== */
-        @media (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .stats-section {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero {
-                padding: 4rem 5% 3rem;
-            }
-
-            .hero-title {
-                font-size: 2.2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-section {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 2rem 1.5rem;
-            }
-
-            .stat-number {
-                font-size: 2.2rem;
-            }
-
-            .cta-section h2 {
-                font-size: 1.8rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn-primary,
-            .btn-outline {
-                width: 100%;
-                max-width: 300px;
-                justify-content: center;
-            }
+            .nav-links { display: none; }
+            .hero { padding: 4rem 5% 3rem; }
+            .hero-title { font-size: 2.2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .stats-section { grid-template-columns: repeat(2, 1fr); padding: 2rem 1.5rem; }
+            .stat-number { font-size: 2.2rem; }
+            .cta-section h2 { font-size: 1.8rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-outline { width: 100%; max-width: 300px; justify-content: center; }
         }
 
         @media (max-width: 480px) {
-            .stats-section {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
-
-            .logo-text {
-                font-size: 1.4rem;
-            }
+            .stats-section { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.8rem; }
+            .logo-text { font-size: 1.4rem; }
         }
 
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--dark-bg);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #2d333b;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-blue-dark);
-        }
-
-        /* Selection */
-        ::selection {
-            background: rgba(10, 132, 255, 0.3);
-            color: #ffffff;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: #2d333b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue-dark); }
+        ::selection { background: rgba(10, 132, 255, 0.3); color: #ffffff; }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
-    <div class="particles-container">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-
-    <!-- ==================== NAVIGATION ==================== -->
+    <!-- ========== NAVIGATION ========== -->
     <nav class="navbar" id="navbar">
         <a href="/" class="logo-container">
-            <div class="logo-icon-wrapper">
-                <div class="logo-icon">⚡</div>
-            </div>
+            <div class="logo-icon">⚡</div>
             <span class="logo-text">JAGWAR HOST</span>
         </a>
-        
-        <button class="mobile-menu-btn" aria-label="Menu">☰</button>
         
         <ul class="nav-links">
             <li><a href="#features" class="nav-link">Features</a></li>
             <li><a href="#specs" class="nav-link">Specifications</a></li>
             <li><a href="#pricing" class="nav-link">Pricing</a></li>
             <li><a href="#support" class="nav-link">Support</a></li>
-            <li><a href="#docs" class="nav-link">Documentation</a></li>
         </ul>
         
+        <!-- رابط Sign In الصحيح -->
         <a href="/login" class="btn-signin">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
@@ -923,7 +578,7 @@
         </a>
     </nav>
 
-    <!-- ==================== HERO SECTION ==================== -->
+    <!-- ========== HERO SECTION ========== -->
     <main>
         <section class="hero">
             <div class="hero-badge">
@@ -939,10 +594,11 @@
             <p class="hero-subtitle">
                 Deploy isolated Python servers with dedicated virtual environments, 
                 real-time console streaming, and enterprise-grade file management. 
-                Built for developers who demand absolute control and zero compromises.
+                Built for developers who demand absolute control.
             </p>
             
             <div class="hero-buttons">
+                <!-- رابط Get Started Free الصحيح -->
                 <a href="/login" class="btn-primary">
                     Get Started Free
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -954,55 +610,48 @@
             </div>
         </section>
 
-        <!-- ==================== FEATURES SECTION ==================== -->
+        <!-- ========== FEATURES ========== -->
         <div class="section-container">
-            <h2 class="section-title" id="features">
-                Why Choose <span>JAGWAR</span>?
-            </h2>
+            <h2 class="section-title" id="features">Why Choose <span>JAGWAR</span>?</h2>
             
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">🔒</div>
                     <h3>Absolute Server Isolation</h3>
-                    <p>Each server runs in its own dedicated virtual environment with independent dependencies. Zero shared runtimes, zero cross-contamination, guaranteed sandboxed execution.</p>
+                    <p>Each server runs in its own dedicated virtual environment with independent dependencies. Zero shared runtimes, guaranteed sandboxed execution.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">⚡</div>
                     <h3>Live Console Streaming</h3>
-                    <p>Real-time terminal output via Server-Sent Events. Monitor your applications with sub-second latency, full STDOUT/STDERR capture, and persistent connection streams.</p>
+                    <p>Real-time terminal output via Server-Sent Events. Monitor your applications with sub-second latency and full STDOUT/STDERR capture.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">📁</div>
                     <h3>Advanced File Manager</h3>
-                    <p>Complete CRUD operations, in-browser code editor with syntax support, drag-and-drop uploads, directory management, and instant save-to-disk functionality.</p>
+                    <p>Complete CRUD operations, in-browser code editor, drag-and-drop uploads, and instant save-to-disk functionality.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">🛡️</div>
                     <h3>Enterprise Security</h3>
-                    <p>Comprehensive audit logging with IP tracking, session management, rate limiting, bcrypt password hashing, and full activity monitoring for compliance.</p>
+                    <p>Comprehensive audit logging with IP tracking, session management, rate limiting, and bcrypt password hashing.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">📊</div>
-                    <h3>Real-Time Resource Monitoring</h3>
-                    <p>Live CPU, memory, and process statistics with psutil integration. Track performance metrics and optimize your deployments with actionable insights.</p>
+                    <h3>Real-Time Monitoring</h3>
+                    <p>Live CPU, memory, and process statistics with psutil integration. Track performance metrics and optimize deployments.</p>
                 </div>
-                
                 <div class="feature-card">
                     <div class="feature-icon-wrapper">🔄</div>
                     <h3>One-Click Lifecycle</h3>
-                    <p>Start, stop, and restart servers instantly. Automatic dependency installation from requirements.txt using isolated pip within each virtual environment.</p>
+                    <p>Start, stop, and restart servers instantly. Automatic dependency installation from requirements.txt using isolated pip.</p>
                 </div>
             </div>
 
-            <!-- ==================== STATS SECTION ==================== -->
+            <!-- ========== STATS ========== -->
             <div class="stats-section" id="specs">
                 <div class="stat-item">
                     <div class="stat-number">99.99%</div>
-                    <div class="stat-label">Uptime SLA Guaranteed</div>
+                    <div class="stat-label">Uptime SLA</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">&lt;5ms</div>
@@ -1010,18 +659,19 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">NVMe</div>
-                    <div class="stat-label">SSD Storage Speed</div>
+                    <div class="stat-label">SSD Storage</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">256-bit</div>
-                    <div class="stat-label">Encryption Standard</div>
+                    <div class="stat-label">Encryption</div>
                 </div>
             </div>
 
-            <!-- ==================== CTA SECTION ==================== -->
+            <!-- ========== CTA ========== -->
             <div class="cta-section" id="pricing">
-                <h2>Ready to Deploy Your Python Server?</h2>
-                <p>Start free with one server. Upgrade to premium for up to 5 isolated servers with priority support and advanced features.</p>
+                <h2>Ready to Deploy?</h2>
+                <p>Start free with one server. Upgrade to premium for up to 5 isolated servers with priority support.</p>
+                <!-- رابط Start Building Now الصحيح -->
                 <a href="/login" class="btn-primary">
                     Start Building Now
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1033,77 +683,41 @@
         </div>
     </main>
 
-    <!-- ==================== FOOTER ==================== -->
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="footer-links">
             <a href="#features">Features</a>
             <a href="#specs">Specifications</a>
             <a href="#pricing">Pricing</a>
             <a href="#support">Support</a>
-            <a href="#docs">Documentation</a>
             <a href="/login">Sign In</a>
         </div>
         <p>{{ footer_text }}</p>
     </footer>
 
-    <!-- ==================== SCRIPTS ==================== -->
     <script>
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
+                navbar.style.background = 'rgba(10, 12, 15, 0.95)';
             } else {
-                navbar.classList.remove('scrolled');
+                navbar.style.background = 'rgba(15, 18, 24, 0.8)';
             }
         });
 
-        // Smooth scroll for anchor links
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe feature cards
-        document.querySelectorAll('.feature-card').forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'all 0.6s ease';
-            card.style.transitionDelay = `${index * 0.1}s`;
-            observer.observe(card);
-        });
-
-        // Console log branding
-        console.log(`
-        ╔══════════════════════════════════════════════╗
-        ║        ⚡ JAGWAR HOST v3.0 ⚡               ║
-        ║    Enterprise Python Hosting Platform       ║
-        ║    Absolute Isolation • Live Console        ║
-        ╚══════════════════════════════════════════════╝
-        `);
+        console.log('⚡ JAGWAR HOST v3.0 - Enterprise Python Hosting Platform');
     </script>
 </body>
 </html>
