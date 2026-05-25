@@ -91,10 +91,7 @@
             border-radius: 50px;
         }
 
-        .btn-back:hover {
-            background: rgba(10, 132, 255, 0.1);
-            text-shadow: 0 0 15px rgba(10, 132, 255, 0.5);
-        }
+        .btn-back:hover { background: rgba(10, 132, 255, 0.1); }
 
         .server-title {
             font-weight: 700;
@@ -104,31 +101,21 @@
             gap: 0.5rem;
         }
 
-        .server-title .status-dot {
-            width: 9px;
-            height: 9px;
+        .status-dot {
+            width: 9px; height: 9px;
             border-radius: 50%;
         }
 
         .status-dot.running { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); animation: pulse 2s infinite; }
         .status-dot.stopped { background: #6b7280; }
-        .status-dot.error { background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-badge {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        .user-badge { font-size: 0.8rem; color: var(--text-secondary); }
 
         /* ========== MAIN LAYOUT ========== */
         .main-container {
@@ -160,7 +147,6 @@
             min-height: 0;
         }
 
-        /* Status Bar */
         .status-bar {
             display: flex;
             gap: 1.5rem;
@@ -172,32 +158,12 @@
             border: var(--border-subtle);
         }
 
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-        }
-
-        .status-label {
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-
-        .status-value {
-            font-weight: 700;
-            font-family: 'Fira Code', monospace;
-            color: var(--neon-blue);
-            font-size: 0.95rem;
-        }
-
+        .status-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+        .status-label { color: var(--text-tertiary); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; font-weight: 600; }
+        .status-value { font-weight: 700; font-family: 'Fira Code', monospace; color: var(--neon-blue); font-size: 0.95rem; }
         .status-value.running { color: var(--neon-green); }
         .status-value.stopped { color: var(--text-tertiary); }
 
-        /* Button Groups */
         .btn-group {
             display: flex;
             gap: 0.8rem;
@@ -220,61 +186,21 @@
             gap: 0.4rem;
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-start {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--neon-green);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-        }
-        .btn-start:hover:not(:disabled) {
-            background: rgba(34, 197, 94, 0.3);
-            box-shadow: var(--neon-glow-green);
-            transform: translateY(-2px);
-        }
+        .btn-start { background: rgba(34, 197, 94, 0.2); color: var(--neon-green); border: 1px solid rgba(34, 197, 94, 0.4); }
+        .btn-start:hover:not(:disabled) { background: rgba(34, 197, 94, 0.3); box-shadow: var(--neon-glow-green); transform: translateY(-2px); }
 
-        .btn-stop {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--neon-red);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-        }
-        .btn-stop:hover:not(:disabled) {
-            background: rgba(239, 68, 68, 0.3);
-            box-shadow: var(--neon-glow-red);
-            transform: translateY(-2px);
-        }
+        .btn-stop { background: rgba(239, 68, 68, 0.2); color: var(--neon-red); border: 1px solid rgba(239, 68, 68, 0.4); }
+        .btn-stop:hover:not(:disabled) { background: rgba(239, 68, 68, 0.3); box-shadow: var(--neon-glow-red); transform: translateY(-2px); }
 
-        .btn-restart {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--neon-yellow);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-        }
-        .btn-restart:hover:not(:disabled) {
-            background: rgba(245, 158, 11, 0.3);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
-            transform: translateY(-2px);
-        }
+        .btn-restart { background: rgba(245, 158, 11, 0.2); color: var(--neon-yellow); border: 1px solid rgba(245, 158, 11, 0.4); }
+        .btn-restart:hover:not(:disabled) { background: rgba(245, 158, 11, 0.3); box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); transform: translateY(-2px); }
 
-        .btn-clear {
-            background: rgba(107, 114, 128, 0.2);
-            color: var(--text-secondary);
-            border: 1px solid #2d333b;
-        }
-        .btn-clear:hover:not(:disabled) {
-            background: rgba(107, 114, 128, 0.3);
-            transform: translateY(-2px);
-        }
+        .btn-clear { background: rgba(107, 114, 128, 0.2); color: var(--text-secondary); border: 1px solid #2d333b; }
+        .btn-clear:hover:not(:disabled) { background: rgba(107, 114, 128, 0.3); transform: translateY(-2px); }
 
-        /* Console */
-        .console-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
+        .console-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 
         .console-header {
             display: flex;
@@ -283,18 +209,8 @@
             margin-bottom: 0.8rem;
         }
 
-        .console-title {
-            font-size: 0.8rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-
-        .console-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
+        .console-title { font-size: 0.8rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        .console-actions { display: flex; gap: 0.5rem; }
 
         .btn-icon {
             background: transparent;
@@ -307,10 +223,7 @@
             transition: all var(--transition-fast);
         }
 
-        .btn-icon:hover {
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-        }
+        .btn-icon:hover { color: var(--neon-blue); border-color: var(--neon-blue); }
 
         #console-output {
             background: var(--dark-console);
@@ -330,24 +243,6 @@
             box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
         }
 
-        #console-output .line-number {
-            color: #444;
-            margin-right: 1rem;
-            user-select: none;
-        }
-
-        #console-output .stderr {
-            color: var(--console-red);
-        }
-
-        #console-output .timestamp {
-            color: var(--console-yellow);
-        }
-
-        #console-output .info {
-            color: var(--console-blue);
-        }
-
         /* ========== FILE PANEL ========== */
         .file-panel {
             width: 420px;
@@ -356,10 +251,7 @@
             min-width: 350px;
         }
 
-        .file-panel .panel-card {
-            flex: 1;
-            min-height: 0;
-        }
+        .file-panel .panel-card { flex: 1; min-height: 0; }
 
         .file-header {
             display: flex;
@@ -368,21 +260,9 @@
             margin-bottom: 1rem;
         }
 
-        .file-title {
-            font-weight: 700;
-            color: var(--neon-blue);
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
+        .file-title { font-weight: 700; color: var(--neon-blue); font-size: 1.1rem; display: flex; align-items: center; gap: 0.4rem; }
 
-        .file-actions-bar {
-            display: flex;
-            gap: 0.4rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
+        .file-actions-bar { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
 
         .btn-file {
             padding: 0.45rem 0.9rem;
@@ -398,11 +278,7 @@
             white-space: nowrap;
         }
 
-        .btn-file:hover {
-            border-color: var(--neon-blue);
-            color: var(--neon-blue);
-            background: rgba(10, 132, 255, 0.1);
-        }
+        .btn-file:hover { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(10, 132, 255, 0.1); }
 
         .file-list {
             flex: 1;
@@ -424,49 +300,16 @@
             font-size: 0.85rem;
         }
 
-        .file-item:hover {
-            background: rgba(10, 132, 255, 0.05);
-        }
+        .file-item:hover { background: rgba(10, 132, 255, 0.05); }
+        .file-item:last-child { border-bottom: none; }
 
-        .file-item:last-child {
-            border-bottom: none;
-        }
+        .file-name { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0; }
+        .file-icon { font-size: 1rem; flex-shrink: 0; }
+        .file-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-size { color: var(--text-tertiary); font-size: 0.75rem; margin-right: 0.5rem; }
 
-        .file-name {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .file-icon {
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .file-name-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .file-size {
-            color: var(--text-tertiary);
-            font-size: 0.75rem;
-            margin-right: 0.5rem;
-        }
-
-        .file-item-actions {
-            display: flex;
-            gap: 0.3rem;
-            opacity: 0;
-            transition: opacity var(--transition-fast);
-        }
-
-        .file-item:hover .file-item-actions {
-            opacity: 1;
-        }
+        .file-item-actions { display: flex; gap: 0.3rem; opacity: 0; transition: opacity var(--transition-fast); }
+        .file-item:hover .file-item-actions { opacity: 1; }
 
         .btn-item {
             background: transparent;
@@ -479,31 +322,16 @@
             transition: all var(--transition-fast);
         }
 
-        .btn-item:hover {
-            color: var(--neon-blue);
-            background: rgba(10, 132, 255, 0.1);
-        }
+        .btn-item:hover { color: var(--neon-blue); background: rgba(10, 132, 255, 0.1); }
+        .btn-item.delete:hover { color: var(--neon-red); background: rgba(239, 68, 68, 0.1); }
 
-        .btn-item.delete:hover {
-            color: var(--neon-red);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .disk-info {
-            margin-top: 0.8rem;
-            font-size: 0.78rem;
-            color: var(--text-tertiary);
-            text-align: center;
-        }
+        .disk-info { margin-top: 0.8rem; font-size: 0.78rem; color: var(--text-tertiary); text-align: center; }
 
         /* ========== MODAL ========== */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             align-items: center;
@@ -511,9 +339,7 @@
             backdrop-filter: blur(4px);
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal {
             background: var(--dark-card);
@@ -528,38 +354,12 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+        .modal-title { font-weight: 700; color: var(--neon-blue); font-size: 1.1rem; }
+        .modal-close { background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; }
+        .modal-close:hover { color: var(--neon-red); }
 
-        .modal-title {
-            font-weight: 700;
-            color: var(--neon-blue);
-            font-size: 1.1rem;
-        }
-
-        .modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color var(--transition-fast);
-        }
-
-        .modal-close:hover {
-            color: var(--neon-red);
-        }
-
-        .modal-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
-        }
+        .modal-body { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 
         #editor-textarea {
             flex: 1;
@@ -575,58 +375,18 @@
             outline: none;
         }
 
-        #editor-textarea:focus {
-            border-color: var(--neon-blue);
-        }
+        #editor-textarea:focus { border-color: var(--neon-blue); }
 
-        .modal-footer {
-            display: flex;
-            gap: 0.8rem;
-            justify-content: flex-end;
-            margin-top: 1rem;
-        }
+        .modal-footer { display: flex; gap: 0.8rem; justify-content: flex-end; margin-top: 1rem; }
 
-        .btn-save {
-            background: var(--gradient-blue);
-            color: #fff;
-            border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-medium);
-        }
+        .btn-save { background: var(--gradient-blue); color: #fff; border: none; padding: 0.7rem 1.5rem; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .btn-save:hover { box-shadow: var(--neon-glow-strong); }
 
-        .btn-save:hover {
-            box-shadow: var(--neon-glow-strong);
-        }
-
-        .btn-cancel {
-            background: transparent;
-            border: var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-cancel:hover {
-            border-color: var(--neon-red);
-            color: var(--neon-red);
-        }
+        .btn-cancel { background: transparent; border: var(--border-subtle); color: var(--text-secondary); padding: 0.7rem 1.5rem; border-radius: 50px; font-weight: 600; cursor: pointer; }
+        .btn-cancel:hover { border-color: var(--neon-red); color: var(--neon-red); }
 
         /* ========== TOAST ========== */
-        .toast-container {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        .toast-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
 
         .toast {
             padding: 0.9rem 1.5rem;
@@ -640,7 +400,6 @@
 
         .toast-success { background: #065f46; border: 1px solid #34d399; }
         .toast-error { background: #7f1d1d; border: 1px solid #f87171; }
-        .toast-info { background: #1e3a5f; border: 1px solid #60a5fa; }
 
         @keyframes slideInRight {
             from { transform: translateX(100%); opacity: 0; }
@@ -657,18 +416,10 @@
             letter-spacing: 0.3px;
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 1000px) {
-            .main-container {
-                flex-direction: column;
-            }
-            .file-panel {
-                width: 100%;
-                min-width: 0;
-            }
-            #console-output {
-                max-height: 350px;
-            }
+            .main-container { flex-direction: column; }
+            .file-panel { width: 100%; min-width: 0; }
+            #console-output { max-height: 350px; }
         }
 
         @media (max-width: 600px) {
@@ -711,47 +462,21 @@
         <!-- Console Panel -->
         <div class="console-panel">
             <div class="panel-card">
-                <!-- Status Bar -->
                 <div class="status-bar">
-                    <div class="status-item">
-                        <span class="status-label">Status</span>
-                        <span class="status-value" id="statusText">-</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">PID</span>
-                        <span class="status-value" id="statusPid">-</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">CPU</span>
-                        <span class="status-value" id="statusCpu">0%</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">RAM</span>
-                        <span class="status-value" id="statusRam">0 MB</span>
-                    </div>
-                    <div class="status-item">
-                        <span class="status-label">Uptime</span>
-                        <span class="status-value" id="statusUptime">0s</span>
-                    </div>
+                    <div class="status-item"><span class="status-label">Status</span><span class="status-value" id="statusText">-</span></div>
+                    <div class="status-item"><span class="status-label">PID</span><span class="status-value" id="statusPid">-</span></div>
+                    <div class="status-item"><span class="status-label">CPU</span><span class="status-value" id="statusCpu">0%</span></div>
+                    <div class="status-item"><span class="status-label">RAM</span><span class="status-value" id="statusRam">0 MB</span></div>
+                    <div class="status-item"><span class="status-label">Uptime</span><span class="status-value" id="statusUptime">0s</span></div>
                 </div>
 
-                <!-- Buttons -->
                 <div class="btn-group">
-                    <button class="btn btn-start" onclick="controlServer('start')" id="btnStart">
-                        ▶ Start Server
-                    </button>
-                    <button class="btn btn-stop" onclick="controlServer('stop')" id="btnStop">
-                        ⏹ Stop Server
-                    </button>
-                    <button class="btn btn-restart" onclick="controlServer('restart')" id="btnRestart">
-                        ↻ Restart Server
-                    </button>
-                    <button class="btn btn-clear" onclick="clearConsole()">
-                        🧹 Clear Console
-                    </button>
+                    <button class="btn btn-start" onclick="controlServer('start')" id="btnStart">▶ Start Server</button>
+                    <button class="btn btn-stop" onclick="controlServer('stop')" id="btnStop">⏹ Stop Server</button>
+                    <button class="btn btn-restart" onclick="controlServer('restart')" id="btnRestart">↻ Restart Server</button>
+                    <button class="btn btn-clear" onclick="clearConsole()">🧹 Clear Console</button>
                 </div>
 
-                <!-- Console Output -->
                 <div class="console-wrapper">
                     <div class="console-header">
                         <span class="console-title">📟 Live Console Output</span>
@@ -760,11 +485,7 @@
                             <button class="btn-icon" onclick="scrollToBottom()" title="Scroll to bottom">⬇</button>
                         </div>
                     </div>
-                    <div id="console-output">
-                        <span class="timestamp">[{{ server.get('created_at', '')[:19] }}]</span> 
-                        <span class="info">JAGWAR HOST Console Ready.</span>
-                        Waiting for server output...
-                    </div>
+                    <div id="console-output">JAGWAR HOST Console Ready. Waiting for server output...</div>
                 </div>
             </div>
         </div>
@@ -772,9 +493,7 @@
         <!-- File Panel -->
         <div class="file-panel">
             <div class="panel-card">
-                <div class="file-header">
-                    <div class="file-title">📁 File Manager</div>
-                </div>
+                <div class="file-header"><div class="file-title">📁 File Manager</div></div>
 
                 <div class="file-actions-bar">
                     <button class="btn-file" onclick="createNewFile()">➕ New File</button>
@@ -783,10 +502,7 @@
                     <input type="file" id="uploadInput" style="display:none;" onchange="uploadFile(this)">
                 </div>
 
-                <div class="file-list" id="fileList">
-                    <div style="text-align:center;padding:2rem;color:var(--text-tertiary);">Loading files...</div>
-                </div>
-
+                <div class="file-list" id="fileList"><div style="text-align:center;padding:2rem;color:var(--text-tertiary);">Loading files...</div></div>
                 <div class="disk-info" id="diskInfo"></div>
             </div>
         </div>
@@ -809,13 +525,11 @@
         </div>
     </div>
 
-    <!-- ========== TOAST CONTAINER ========== -->
+    <!-- ========== TOAST ========== -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ========== FOOTER ========== -->
-    <footer class="footer">
-        {{ footer_text }}
-    </footer>
+    <footer class="footer">{{ footer_text }}</footer>
 
     <script>
         const serverName = "{{ server.name }}";
@@ -823,350 +537,162 @@
         let eventSource = null;
         let currentFile = null;
 
-        // ========== CONSOLE FUNCTIONS ==========
         function controlServer(action) {
             const btns = document.querySelectorAll('.btn-group .btn');
             btns.forEach(b => b.disabled = true);
-
             fetch(`/api/server/${action}/${serverName}`, { method: 'POST' })
                 .then(r => r.json())
                 .then(data => {
                     showToast(data.message || `${action} completed`, data.success ? 'success' : 'error');
-                    if (action === 'start' || action === 'restart') {
-                        setTimeout(startConsoleStream, 500);
-                    }
-                    if (action === 'stop') {
-                        closeEventSource();
-                    }
+                    if (action === 'start' || action === 'restart') setTimeout(startConsoleStream, 500);
+                    if (action === 'stop') closeEventSource();
                     updateStatus();
                 })
                 .catch(err => showToast('Error: ' + err.message, 'error'))
-                .finally(() => {
-                    btns.forEach(b => b.disabled = false);
-                });
+                .finally(() => btns.forEach(b => b.disabled = false));
         }
 
         function startConsoleStream() {
             closeEventSource();
-            consoleEl.innerHTML = '<span class="info">Connecting to console...</span>\n';
-            
+            consoleEl.innerHTML = 'Connecting to console...\n';
             eventSource = new EventSource(`/api/server/console/${serverName}`);
-            
             eventSource.onmessage = function(event) {
                 const line = event.data;
-                if (line.startsWith('[SERVER_NOT_RUNNING]')) {
-                    consoleEl.innerHTML += '\n<span class="stderr">[Server is not running]</span>\n';
-                    closeEventSource();
-                } else if (line.startsWith('[PROCESS_ENDED]')) {
-                    consoleEl.innerHTML += '\n<span class="stderr">[Process ended]</span>\n';
-                    closeEventSource();
-                } else if (line.startsWith('[STOPPED]')) {
-                    consoleEl.innerHTML += '\n<span class="stderr">[Server stopped]</span>\n';
-                    closeEventSource();
-                } else if (line.startsWith('[EXIT:')) {
-                    consoleEl.innerHTML += `\n<span class="stderr">[Process exited with code: ${line}]</span>\n`;
-                    closeEventSource();
-                } else {
-                    consoleEl.innerHTML += line;
-                }
+                if (line.startsWith('[SERVER_NOT_RUNNING]')) { consoleEl.innerHTML += '\n[Server is not running]\n'; closeEventSource(); }
+                else if (line.startsWith('[PROCESS_ENDED]')) { consoleEl.innerHTML += '\n[Process ended]\n'; closeEventSource(); }
+                else if (line.startsWith('[STOPPED]')) { consoleEl.innerHTML += '\n[Server stopped]\n'; closeEventSource(); }
+                else { consoleEl.innerHTML += line; }
                 scrollToBottom();
             };
-
-            eventSource.onerror = function() {
-                consoleEl.innerHTML += '\n<span class="stderr">[Connection lost - reconnecting...]</span>\n';
-                closeEventSource();
-                setTimeout(startConsoleStream, 3000);
-            };
+            eventSource.onerror = function() { consoleEl.innerHTML += '\n[Connection lost - reconnecting...]\n'; closeEventSource(); setTimeout(startConsoleStream, 3000); };
         }
 
-        function closeEventSource() {
-            if (eventSource) {
-                eventSource.close();
-                eventSource = null;
-            }
-        }
+        function closeEventSource() { if (eventSource) { eventSource.close(); eventSource = null; } }
+        function clearConsole() { consoleEl.innerHTML = 'Console cleared.\n'; }
+        function copyConsole() { navigator.clipboard.writeText(consoleEl.innerText).then(() => showToast('Copied!', 'success')); }
+        function scrollToBottom() { consoleEl.scrollTop = consoleEl.scrollHeight; }
 
-        function clearConsole() {
-            consoleEl.innerHTML = '<span class="info">Console cleared.</span>\n';
-        }
-
-        function copyConsole() {
-            const text = consoleEl.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Console output copied!', 'success');
-            });
-        }
-
-        function scrollToBottom() {
-            consoleEl.scrollTop = consoleEl.scrollHeight;
-        }
-
-        // ========== STATUS UPDATES ==========
         function updateStatus() {
-            fetch(`/api/server/status/${serverName}`)
-                .then(r => r.json())
-                .then(data => {
-                    const statusEl = document.getElementById('statusText');
-                    const dotEl = document.getElementById('navStatusDot');
-                    
-                    if (data.running) {
-                        statusEl.textContent = 'RUNNING';
-                        statusEl.className = 'status-value running';
-                        dotEl.className = 'status-dot running';
-                    } else {
-                        statusEl.textContent = 'STOPPED';
-                        statusEl.className = 'status-value stopped';
-                        dotEl.className = 'status-dot stopped';
-                    }
-                    
-                    document.getElementById('statusPid').textContent = data.pid || '-';
-                    document.getElementById('statusCpu').textContent = data.cpu_percent + '%';
-                    document.getElementById('statusRam').textContent = data.memory_mb + ' MB';
-                    document.getElementById('statusUptime').textContent = data.uptime_seconds + 's';
-                })
-                .catch(() => {});
+            fetch(`/api/server/status/${serverName}`).then(r => r.json()).then(data => {
+                const statusEl = document.getElementById('statusText');
+                const dotEl = document.getElementById('navStatusDot');
+                if (data.running) { statusEl.textContent = 'RUNNING'; statusEl.className = 'status-value running'; dotEl.className = 'status-dot running'; }
+                else { statusEl.textContent = 'STOPPED'; statusEl.className = 'status-value stopped'; dotEl.className = 'status-dot stopped'; }
+                document.getElementById('statusPid').textContent = data.pid || '-';
+                document.getElementById('statusCpu').textContent = data.cpu_percent + '%';
+                document.getElementById('statusRam').textContent = data.memory_mb + ' MB';
+                document.getElementById('statusUptime').textContent = data.uptime_seconds + 's';
+            }).catch(() => {});
         }
 
-        // ========== FILE MANAGER ==========
         function loadFiles() {
-            fetch(`/api/files/list/${serverName}`)
-                .then(r => r.json())
-                .then(data => {
-                    let html = '';
-                    if (data.files && data.files.length > 0) {
-                        data.files.forEach(file => {
-                            const icon = file.type === 'directory' ? '📁' : getFileIcon(file.name);
-                            const sizeStr = file.type === 'file' ? formatSize(file.size) : '';
-                            html += `
-                                <div class="file-item">
-                                    <div class="file-name" onclick="${file.type === 'file' ? `openEditor('${file.path}')` : ''}">
-                                        <span class="file-icon">${icon}</span>
-                                        <span class="file-name-text">${file.name}</span>
-                                    </div>
-                                    <span class="file-size">${sizeStr}</span>
-                                    <div class="file-item-actions">
-                                        ${file.type === 'file' ? `<button class="btn-item" onclick="openEditor('${file.path}')" title="Edit">✏️</button>` : ''}
-                                        <button class="btn-item" onclick="renameItem('${file.path}')" title="Rename">✏️</button>
-                                        <button class="btn-item delete" onclick="deleteItem('${file.path}')" title="Delete">🗑</button>
-                                    </div>
-                                </div>`;
-                        });
-                    } else {
-                        html = '<div style="text-align:center;padding:2rem;color:var(--text-tertiary);">No files yet</div>';
-                    }
-                    document.getElementById('fileList').innerHTML = html;
-                    
-                    if (data.disk_usage) {
-                        document.getElementById('diskInfo').textContent = 
-                            `Disk: ${formatSize(data.disk_usage.total_size)} | Files: ${data.disk_usage.file_count} | Folders: ${data.disk_usage.dir_count}`;
-                    }
-                });
-        }
-
-        function getFileIcon(filename) {
-            const ext = filename.split('.').pop().toLowerCase();
-            const icons = {
-                py: '🐍', js: '📜', html: '🌐', css: '🎨', json: '📋',
-                txt: '📄', md: '📝', yml: '⚙️', yaml: '⚙️', cfg: '⚙️',
-                ini: '⚙️', conf: '⚙️', sh: '💻', bat: '💻', xml: '📰',
-                csv: '📊', sql: '🗄️', gitignore: '🙈', dockerfile: '🐳'
-            };
-            return icons[ext] || '📄';
+            fetch(`/api/files/list/${serverName}`).then(r => r.json()).then(data => {
+                let html = '';
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const icon = file.type === 'directory' ? '📁' : '📄';
+                        const sizeStr = file.type === 'file' ? formatSize(file.size) : '';
+                        html += `<div class="file-item">
+                            <div class="file-name" onclick="${file.type === 'file' ? `openEditor('${file.path}')` : ''}">
+                                <span class="file-icon">${icon}</span><span class="file-name-text">${file.name}</span>
+                            </div>
+                            <span class="file-size">${sizeStr}</span>
+                            <div class="file-item-actions">
+                                ${file.type === 'file' ? `<button class="btn-item" onclick="openEditor('${file.path}')">✏️</button>` : ''}
+                                <button class="btn-item" onclick="renameItem('${file.path}')">✏️</button>
+                                <button class="btn-item delete" onclick="deleteItem('${file.path}')">🗑</button>
+                            </div></div>`;
+                    });
+                } else { html = '<div style="text-align:center;padding:2rem;color:var(--text-tertiary);">No files yet</div>'; }
+                document.getElementById('fileList').innerHTML = html;
+                if (data.disk_usage) document.getElementById('diskInfo').textContent = `Disk: ${formatSize(data.disk_usage.total_size)} | Files: ${data.disk_usage.file_count}`;
+            });
         }
 
         function formatSize(bytes) {
             if (!bytes) return '0 B';
             const units = ['B', 'KB', 'MB', 'GB'];
             let i = 0;
-            while (bytes >= 1024 && i < units.length - 1) {
-                bytes /= 1024;
-                i++;
-            }
+            while (bytes >= 1024 && i < units.length - 1) { bytes /= 1024; i++; }
             return bytes.toFixed(1) + ' ' + units[i];
         }
 
         function openEditor(filepath) {
             currentFile = filepath;
             document.getElementById('modalTitle').textContent = 'Editing: ' + filepath;
-            
-            fetch(`/api/files/read/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: filepath })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) {
-                    showToast(data.error, 'error');
-                    return;
-                }
-                document.getElementById('editor-textarea').value = data.content;
-                document.getElementById('editorModal').classList.add('active');
-            });
+            fetch(`/api/files/read/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ path: filepath }) })
+                .then(r => r.json()).then(data => {
+                    if (data.error) { showToast(data.error, 'error'); return; }
+                    document.getElementById('editor-textarea').value = data.content;
+                    document.getElementById('editorModal').classList.add('active');
+                });
         }
 
-        function closeEditor() {
-            document.getElementById('editorModal').classList.remove('active');
-            currentFile = null;
-        }
+        function closeEditor() { document.getElementById('editorModal').classList.remove('active'); currentFile = null; }
 
         function saveFile() {
             if (!currentFile) return;
             const content = document.getElementById('editor-textarea').value;
-            
-            fetch(`/api/files/write/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: currentFile, content: content })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) {
-                    showToast(data.error, 'error');
-                } else {
-                    showToast('File saved successfully!', 'success');
-                    closeEditor();
-                    loadFiles();
-                }
-            });
+            fetch(`/api/files/write/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ path: currentFile, content: content }) })
+                .then(r => r.json()).then(data => {
+                    if (data.error) showToast(data.error, 'error');
+                    else { showToast('File saved!', 'success'); closeEditor(); loadFiles(); }
+                });
         }
 
         function createNewFile() {
-            const name = prompt('Enter file name:');
-            if (!name) return;
-            
-            fetch(`/api/files/create-file/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: name })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) showToast(data.error, 'error');
-                else {
-                    showToast('File created!', 'success');
-                    loadFiles();
-                }
-            });
+            const name = prompt('Enter file name:'); if (!name) return;
+            fetch(`/api/files/create-file/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ path: name }) })
+                .then(r => r.json()).then(data => { if (data.error) showToast(data.error, 'error'); else { showToast('File created!', 'success'); loadFiles(); } });
         }
 
         function createNewFolder() {
-            const name = prompt('Enter folder name:');
-            if (!name) return;
-            
-            fetch(`/api/files/create-folder/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: name })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) showToast(data.error, 'error');
-                else {
-                    showToast('Folder created!', 'success');
-                    loadFiles();
-                }
-            });
+            const name = prompt('Enter folder name:'); if (!name) return;
+            fetch(`/api/files/create-folder/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ path: name }) })
+                .then(r => r.json()).then(data => { if (data.error) showToast(data.error, 'error'); else { showToast('Folder created!', 'success'); loadFiles(); } });
         }
 
         function deleteItem(path) {
-            if (!confirm(`Delete "${path}"? This cannot be undone.`)) return;
-            
-            fetch(`/api/files/delete/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: path })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) showToast(data.error, 'error');
-                else {
-                    showToast('Deleted!', 'success');
-                    loadFiles();
-                }
-            });
+            if (!confirm(`Delete "${path}"?`)) return;
+            fetch(`/api/files/delete/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ path: path }) })
+                .then(r => r.json()).then(data => { if (data.error) showToast(data.error, 'error'); else { showToast('Deleted!', 'success'); loadFiles(); } });
         }
 
         function renameItem(oldPath) {
-            const newName = prompt('Enter new name:', oldPath);
-            if (!newName || newName === oldPath) return;
-            
-            fetch(`/api/files/rename/${serverName}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ old_path: oldPath, new_path: newName })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) showToast(data.error, 'error');
-                else {
-                    showToast('Renamed!', 'success');
-                    loadFiles();
-                }
-            });
+            const newName = prompt('Enter new name:', oldPath); if (!newName || newName === oldPath) return;
+            fetch(`/api/files/rename/${serverName}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ old_path: oldPath, new_path: newName }) })
+                .then(r => r.json()).then(data => { if (data.error) showToast(data.error, 'error'); else { showToast('Renamed!', 'success'); loadFiles(); } });
         }
 
         function uploadFile(input) {
-            const file = input.files[0];
-            if (!file) return;
-            
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            fetch(`/api/files/upload/${serverName}`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.error) showToast(data.error, 'error');
-                else {
-                    showToast('Uploaded!', 'success');
-                    loadFiles();
-                }
-            });
-            
+            const file = input.files[0]; if (!file) return;
+            const formData = new FormData(); formData.append('file', file);
+            fetch(`/api/files/upload/${serverName}`, { method: 'POST', body: formData })
+                .then(r => r.json()).then(data => { if (data.error) showToast(data.error, 'error'); else { showToast('Uploaded!', 'success'); loadFiles(); } });
             input.value = '';
         }
 
-        // ========== TOAST ==========
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
-        // ========== INITIALIZATION ==========
         function init() {
             startConsoleStream();
             loadFiles();
             updateStatus();
             setInterval(updateStatus, 3000);
             setInterval(loadFiles, 10000);
-            
-            // Close editor on Escape
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closeEditor();
-            });
-            
-            // Close editor on overlay click
-            document.getElementById('editorModal').addEventListener('click', function(e) {
-                if (e.target === this) closeEditor();
-            });
+            document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeEditor(); });
+            document.getElementById('editorModal').addEventListener('click', function(e) { if (e.target === this) closeEditor(); });
         }
 
         init();
-
-        console.log(`JAGWAR HOST - Server Control: ${serverName}`);
+        console.log('⚡ JAGWAR HOST - Server Control: ' + serverName);
     </script>
 </body>
 </html>
