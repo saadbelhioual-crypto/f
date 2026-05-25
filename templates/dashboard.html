@@ -10,7 +10,6 @@
         :root {
             --neon-blue: #0a84ff;
             --neon-blue-dark: #0066cc;
-            --neon-blue-light: #3b9eff;
             --neon-green: #22c55e;
             --neon-red: #ef4444;
             --neon-yellow: #f59e0b;
@@ -20,9 +19,7 @@
             --neon-glow-subtle: 0 0 15px rgba(10, 132, 255, 0.3);
             --neon-glow-green: 0 0 20px rgba(34, 197, 94, 0.5);
             --dark-bg: #0a0c0f;
-            --dark-surface: #11151a;
             --dark-card: rgba(18, 22, 28, 0.85);
-            --dark-card-hover: rgba(22, 27, 34, 0.95);
             --dark-input: #161b22;
             --border-glow: 1px solid rgba(10, 132, 255, 0.35);
             --border-subtle: 1px solid #2d333b;
@@ -30,7 +27,6 @@
             --text-secondary: #9aa0a6;
             --text-tertiary: #6b7280;
             --gradient-blue: linear-gradient(135deg, #0a84ff 0%, #3b9eff 50%, #0066cc 100%);
-            --gradient-dark: linear-gradient(180deg, #0a0c0f 0%, #11151a 100%);
             --radius-xl: 2rem;
             --radius-lg: 1.5rem;
             --radius-md: 1rem;
@@ -85,9 +81,7 @@
             gap: 0.5rem;
         }
 
-        .logo-icon {
-            font-size: 1.8rem;
-        }
+        .logo-icon { font-size: 1.8rem; }
 
         .user-area {
             display: flex;
@@ -115,10 +109,7 @@
             box-shadow: var(--neon-glow-subtle);
         }
 
-        .user-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
+        .user-name { font-weight: 600; }
 
         .tier-badge {
             padding: 0.25rem 0.75rem;
@@ -142,13 +133,6 @@
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
         }
 
-        .tier-admin {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-        }
-
         .btn-logout {
             padding: 0.55rem 1.5rem;
             background: transparent;
@@ -170,7 +154,7 @@
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
         }
 
-        /* ========== MAIN CONTAINER ========== */
+        /* ========== CONTAINER ========== */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -179,7 +163,6 @@
             width: 100%;
         }
 
-        /* ========== WELCOME SECTION ========== */
         .welcome-section {
             margin-bottom: 2.5rem;
             animation: fadeInUp 0.6s ease;
@@ -190,23 +173,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
+        .welcome-title { font-size: 2rem; font-weight: 700; }
+        .welcome-title span { color: var(--neon-blue); }
+        .welcome-subtitle { color: var(--text-secondary); margin-top: 0.3rem; font-size: 0.95rem; }
 
-        .welcome-title span {
-            color: var(--neon-blue);
-        }
-
-        .welcome-subtitle {
-            color: var(--text-secondary);
-            margin-top: 0.3rem;
-            font-size: 0.95rem;
-        }
-
-        /* ========== STATS CARDS ========== */
+        /* ========== STATS ========== */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -224,10 +195,7 @@
             transition: all var(--transition-medium);
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--neon-glow-subtle);
-        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--neon-glow-subtle); }
 
         .stat-number {
             font-size: 2.2rem;
@@ -245,7 +213,7 @@
             font-weight: 500;
         }
 
-        /* ========== CREATE SERVER CARD ========== */
+        /* ========== CARD ========== */
         .card {
             background: var(--dark-card);
             backdrop-filter: blur(20px);
@@ -253,12 +221,7 @@
             border-radius: var(--radius-xl);
             padding: 2rem;
             margin-bottom: 2rem;
-            transition: all var(--transition-medium);
             animation: fadeInUp 0.6s ease 0.1s both;
-        }
-
-        .card:hover {
-            border-color: rgba(10, 132, 255, 0.6);
         }
 
         .card-header {
@@ -274,14 +237,9 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--neon-blue);
-            letter-spacing: -0.01em;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .card-title-icon {
-            font-size: 1.5rem;
         }
 
         .limit-info {
@@ -314,10 +272,7 @@
             align-items: flex-end;
         }
 
-        .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
+        .form-group { flex: 1; min-width: 200px; }
 
         .form-label {
             display: block;
@@ -346,14 +301,8 @@
             background: #1a1f28;
         }
 
-        .form-input::placeholder {
-            color: var(--text-tertiary);
-        }
-
-        .form-input:read-only {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        .form-input::placeholder { color: var(--text-tertiary); }
+        .form-input:read-only { opacity: 0.7; cursor: not-allowed; }
 
         .btn {
             padding: 0.85rem 2rem;
@@ -364,7 +313,6 @@
             cursor: pointer;
             transition: all var(--transition-medium);
             font-family: inherit;
-            letter-spacing: 0.02em;
             white-space: nowrap;
         }
 
@@ -377,16 +325,14 @@
             gap: 0.5rem;
         }
 
-        .btn-create:hover {
+        .btn-create:hover:not(:disabled) {
             box-shadow: var(--neon-glow-strong);
             transform: translateY(-2px);
         }
 
-        .btn-create:active {
-            transform: translateY(0);
-        }
+        .btn-create:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* ========== SERVERS LIST ========== */
+        /* ========== SERVERS ========== */
         .servers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -408,9 +354,7 @@
         .server-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 2px;
             background: var(--gradient-blue);
             opacity: 0;
@@ -423,9 +367,7 @@
             border-color: rgba(10, 132, 255, 0.5);
         }
 
-        .server-card:hover::before {
-            opacity: 1;
-        }
+        .server-card:hover::before { opacity: 1; }
 
         .server-header {
             display: flex;
@@ -453,25 +395,14 @@
             animation: statusPulse 2s infinite;
         }
 
-        .status-stopped {
-            background: #6b7280;
-        }
-
-        .status-error {
-            background: var(--neon-red);
-            box-shadow: 0 0 12px var(--neon-red);
-        }
+        .status-stopped { background: #6b7280; }
 
         @keyframes statusPulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
 
-        .server-name {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: -0.01em;
-        }
+        .server-name { font-weight: 700; font-size: 1.1rem; }
 
         .server-language {
             font-size: 0.7rem;
@@ -497,10 +428,7 @@
             gap: 0.3rem;
         }
 
-        .meta-value {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
+        .meta-value { color: var(--text-primary); font-weight: 600; }
 
         .server-stats {
             display: flex;
@@ -511,29 +439,11 @@
             border-radius: var(--radius-sm);
         }
 
-        .stat-mini {
-            flex: 1;
-            text-align: center;
-        }
+        .stat-mini { flex: 1; text-align: center; }
+        .stat-mini-value { font-weight: 700; font-size: 0.95rem; color: var(--neon-blue); }
+        .stat-mini-label { font-size: 0.7rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; }
 
-        .stat-mini-value {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--neon-blue);
-        }
-
-        .stat-mini-label {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .server-actions {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-        }
+        .server-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 
         .btn-sm {
             padding: 0.5rem 1.2rem;
@@ -550,25 +460,13 @@
             gap: 0.3rem;
         }
 
-        .btn-manage {
-            background: var(--neon-blue);
-            color: #fff;
-        }
-
-        .btn-manage:hover {
-            box-shadow: var(--neon-glow-subtle);
-            background: var(--neon-blue-dark);
-        }
+        .btn-manage { background: var(--neon-blue); color: #fff; }
+        .btn-manage:hover { box-shadow: var(--neon-glow-subtle); background: var(--neon-blue-dark); }
 
         .btn-start {
             background: rgba(34, 197, 94, 0.15);
             color: var(--neon-green);
             border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .btn-start:hover {
-            background: rgba(34, 197, 94, 0.25);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
         }
 
         .btn-stop {
@@ -577,20 +475,10 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        .btn-stop:hover {
-            background: rgba(239, 68, 68, 0.25);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-        }
-
         .btn-restart {
             background: rgba(245, 158, 11, 0.15);
             color: var(--neon-yellow);
             border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-restart:hover {
-            background: rgba(245, 158, 11, 0.25);
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
         }
 
         .btn-delete {
@@ -599,33 +487,40 @@
             border: 1px solid #2d333b;
         }
 
-        .btn-delete:hover {
-            color: var(--neon-red);
-            border-color: var(--neon-red);
-            background: rgba(239, 68, 68, 0.1);
+        .btn-delete:hover { color: var(--neon-red); border-color: var(--neon-red); background: rgba(239, 68, 68, 0.1); }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-tertiary); }
+        .empty-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+        .empty-title { font-size: 1.2rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .empty-text { font-size: 0.9rem; }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-tertiary);
+        .toast {
+            padding: 0.9rem 1.5rem;
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.85rem;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
+        .toast-success { background: #065f46; border: 1px solid #34d399; }
+        .toast-error { background: #7f1d1d; border: 1px solid #f87171; }
 
-        .empty-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-text {
-            font-size: 0.9rem;
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         /* ========== FOOTER ========== */
@@ -639,46 +534,12 @@
             letter-spacing: 0.3px;
         }
 
-        /* ========== TOAST NOTIFICATIONS ========== */
-        .toast-container {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .toast {
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-md);
-            color: #fff;
-            font-weight: 500;
-            font-size: 0.9rem;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
-        }
-
-        .toast-success { background: #065f46; border: 1px solid #34d399; }
-        .toast-error { background: #7f1d1d; border: 1px solid #f87171; }
-        .toast-info { background: #1e3a5f; border: 1px solid #60a5fa; }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .container { padding: 0 1rem; }
             .servers-grid { grid-template-columns: 1fr; }
             .form-row { flex-direction: column; }
             .server-meta { flex-direction: column; gap: 0.5rem; }
             .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .navbar { padding: 1rem 3%; }
-            .user-name { display: none; }
         }
 
         @media (max-width: 480px) {
@@ -719,15 +580,14 @@
         </div>
     </nav>
 
-    <!-- ========== MAIN CONTAINER ========== -->
+    <!-- ========== MAIN ========== -->
     <div class="container">
-        <!-- Welcome -->
         <div class="welcome-section">
             <h1 class="welcome-title">Welcome, <span>{{ username }}</span></h1>
             <p class="welcome-subtitle">Manage your Python servers with full isolation and live monitoring.</p>
         </div>
 
-        <!-- Stats Row -->
+        <!-- Stats -->
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-number">{{ servers|length }}</div>
@@ -741,19 +601,12 @@
                 <div class="stat-number">{{ tier|upper }}</div>
                 <div class="stat-label">Account Tier</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="runningCount">-</div>
-                <div class="stat-label">Currently Running</div>
-            </div>
         </div>
 
-        <!-- Create Server Card -->
+        <!-- Create Server -->
         <div class="card">
             <div class="card-header">
-                <div class="card-title">
-                    <span class="card-title-icon">🚀</span>
-                    Create New Server
-                </div>
+                <div class="card-title">🚀 Create New Server</div>
                 <div class="limit-info">
                     Servers: {{ servers|length }} / {{ max_servers }}
                     <div class="limit-bar">
@@ -761,51 +614,19 @@
                     </div>
                 </div>
             </div>
-            <form action="/create_server" method="POST" id="createForm">
+            <form action="/create_server" method="POST">
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label" for="server_name">Server Name *</label>
-                        <input 
-                            type="text" 
-                            id="server_name" 
-                            name="server_name" 
-                            class="form-input" 
-                            placeholder="e.g., my-api-server"
-                            required
-                            pattern="[a-zA-Z0-9][a-zA-Z0-9\-_]*"
-                            minlength="3"
-                            maxlength="64"
-                            title="Alphanumeric, hyphens, and underscores only"
-                        >
+                        <label class="form-label">Server Name *</label>
+                        <input type="text" name="server_name" class="form-input" placeholder="e.g., my-api-server" required pattern="[a-zA-Z0-9][a-zA-Z0-9\-_]*" minlength="3" maxlength="64">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="language">Language</label>
-                        <input 
-                            type="text" 
-                            id="language" 
-                            name="language" 
-                            class="form-input" 
-                            value="Python"
-                            readonly
-                        >
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="description">Description</label>
-                        <input 
-                            type="text" 
-                            id="description" 
-                            name="description" 
-                            class="form-input" 
-                            placeholder="Optional description"
-                        >
+                        <label class="form-label">Language</label>
+                        <input type="text" class="form-input" value="Python" readonly>
                     </div>
                     <div class="form-group" style="flex: 1; min-width: auto;">
                         <button type="submit" class="btn btn-create" {% if servers|length >= max_servers %}disabled{% endif %}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"/>
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
-                            Create Server
+                            + Create Server
                         </button>
                     </div>
                 </div>
@@ -815,13 +636,8 @@
         <!-- Servers List -->
         <div class="card">
             <div class="card-header">
-                <div class="card-title">
-                    <span class="card-title-icon">🖥️</span>
-                    My Servers
-                </div>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;">
-                    {{ servers|length }} server(s)
-                </span>
+                <div class="card-title">🖥️ My Servers</div>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">{{ servers|length }} server(s)</span>
             </div>
 
             {% if servers %}
@@ -831,53 +647,30 @@
                 <div class="server-card" style="animation-delay: {{ loop.index0 * 0.1 }}s;">
                     <div class="server-header">
                         <div class="server-name-group">
-                            <span class="status-dot {% if info.get('running') %}status-running{% elif server.get('status') == 'error' %}status-error{% else %}status-stopped{% endif %}"></span>
+                            <span class="status-dot {% if info.get('running') %}status-running{% else %}status-stopped{% endif %}"></span>
                             <span class="server-name">{{ server.name }}</span>
                         </div>
                         <span class="server-language">🐍 Python</span>
                     </div>
 
                     <div class="server-meta">
-                        <div class="meta-item">
-                            Status: <span class="meta-value">{{ info.get('status', server.get('status', 'stopped'))|upper }}</span>
-                        </div>
-                        <div class="meta-item">
-                            Created: <span class="meta-value">{{ server.get('created_at', 'N/A')[:10] }}</span>
-                        </div>
+                        <div class="meta-item">Status: <span class="meta-value">{{ info.get('status', server.get('status', 'stopped'))|upper }}</span></div>
+                        <div class="meta-item">Created: <span class="meta-value">{{ server.get('created_at', 'N/A')[:10] }}</span></div>
                     </div>
 
                     <div class="server-stats">
-                        <div class="stat-mini">
-                            <div class="stat-mini-value">{{ info.get('cpu_percent', 0) }}%</div>
-                            <div class="stat-mini-label">CPU</div>
-                        </div>
-                        <div class="stat-mini">
-                            <div class="stat-mini-value">{{ info.get('memory_mb', 0) }} MB</div>
-                            <div class="stat-mini-label">RAM</div>
-                        </div>
-                        <div class="stat-mini">
-                            <div class="stat-mini-value">{{ info.get('uptime_seconds', 0) }}s</div>
-                            <div class="stat-mini-label">Uptime</div>
-                        </div>
+                        <div class="stat-mini"><div class="stat-mini-value">{{ info.get('cpu_percent', 0) }}%</div><div class="stat-mini-label">CPU</div></div>
+                        <div class="stat-mini"><div class="stat-mini-value">{{ info.get('memory_mb', 0) }} MB</div><div class="stat-mini-label">RAM</div></div>
+                        <div class="stat-mini"><div class="stat-mini-value">{{ info.get('uptime_seconds', 0) }}s</div><div class="stat-mini-label">Uptime</div></div>
                     </div>
 
                     <div class="server-actions">
-                        <a href="/server/{{ server.name }}" class="btn-sm btn-manage">
-                            ⚙️ Manage
-                        </a>
-                        <button class="btn-sm btn-start" onclick="quickAction('{{ server.name }}', 'start')" title="Start Server">
-                            ▶ Start
-                        </button>
-                        <button class="btn-sm btn-stop" onclick="quickAction('{{ server.name }}', 'stop')" title="Stop Server">
-                            ⏹ Stop
-                        </button>
-                        <button class="btn-sm btn-restart" onclick="quickAction('{{ server.name }}', 'restart')" title="Restart Server">
-                            ↻ Restart
-                        </button>
-                        <form action="/delete_server/{{ server.name }}" method="POST" style="display:inline;" onsubmit="return confirm('Permanently delete server \'{{ server.name }}\'? This cannot be undone.');">
-                            <button type="submit" class="btn-sm btn-delete" title="Delete Server">
-                                🗑 Delete
-                            </button>
+                        <a href="/server/{{ server.name }}" class="btn-sm btn-manage">⚙️ Manage</a>
+                        <button class="btn-sm btn-start" onclick="quickAction('{{ server.name }}', 'start')">▶ Start</button>
+                        <button class="btn-sm btn-stop" onclick="quickAction('{{ server.name }}', 'stop')">⏹ Stop</button>
+                        <button class="btn-sm btn-restart" onclick="quickAction('{{ server.name }}', 'restart')">↻ Restart</button>
+                        <form action="/delete_server/{{ server.name }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete server \'{{ server.name }}\'? This cannot be undone.');">
+                            <button type="submit" class="btn-sm btn-delete">🗑 Delete</button>
                         </form>
                     </div>
                 </div>
@@ -887,98 +680,40 @@
             <div class="empty-state">
                 <div class="empty-icon">📦</div>
                 <div class="empty-title">No Servers Yet</div>
-                <p class="empty-text">Create your first server using the form above and start deploying Python applications!</p>
+                <p class="empty-text">Create your first server above and start deploying Python applications!</p>
             </div>
             {% endif %}
         </div>
     </div>
 
-    <!-- ========== TOAST CONTAINER ========== -->
+    <!-- ========== TOAST ========== -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- ========== FOOTER ========== -->
-    <footer class="footer">
-        {{ footer_text }}
-    </footer>
+    <footer class="footer">{{ footer_text }}</footer>
 
-    <!-- ========== SCRIPTS ========== -->
     <script>
-        // Quick server actions
         async function quickAction(serverName, action) {
-            const btn = event.target;
-            const originalText = btn.textContent;
-            btn.textContent = '...';
-            btn.disabled = true;
-
             try {
                 const response = await fetch(`/api/server/${action}/${serverName}`, { method: 'POST' });
                 const data = await response.json();
-                
-                if (data.success) {
-                    showToast(`Server ${action} successful: ${data.message}`, 'success');
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    showToast(`Failed to ${action} server: ${data.message}`, 'error');
-                }
+                showToast(data.message || `${action} completed`, data.success ? 'success' : 'error');
+                setTimeout(() => location.reload(), 1000);
             } catch (error) {
-                showToast(`Error: ${error.message}`, 'error');
-            } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
+                showToast('Error: ' + error.message, 'error');
             }
         }
 
-        // Toast notification system
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
             toast.textContent = message;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'all 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 4000);
         }
 
-        // Count running servers
-        function updateRunningCount() {
-            const dots = document.querySelectorAll('.status-running');
-            document.getElementById('runningCount').textContent = dots.length;
-        }
-
-        // Form validation
-        document.getElementById('createForm').addEventListener('submit', function(e) {
-            const nameInput = document.getElementById('server_name');
-            if (nameInput.value.length < 3) {
-                e.preventDefault();
-                showToast('Server name must be at least 3 characters', 'error');
-                nameInput.focus();
-            }
-        });
-
-        // Initialize
-        updateRunningCount();
-
-        // Periodic status refresh
-        setInterval(() => {
-            fetch('/api/server/status/first')
-                .then(r => r.json())
-                .catch(() => {});
-        }, 30000);
-
-        // Console branding
-        console.log(`
-        ╔══════════════════════════════════════════╗
-        ║   ⚡ JAGWAR HOST - User Dashboard ⚡    ║
-        ║   Enterprise Python Hosting Platform    ║
-        ║   User: {{ username }}                   
-        ║   Tier: {{ tier }}                        
-        ╚══════════════════════════════════════════╝
-        `);
+        console.log('⚡ JAGWAR HOST - Dashboard | User: {{ username }} | Tier: {{ tier }}');
     </script>
 </body>
 </html>
