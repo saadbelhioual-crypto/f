@@ -15,7 +15,7 @@ import queue
 import time
 import signal
 import uuid
-import logging
+import re
 import platform
 from datetime import datetime, timedelta
 from functools import wraps
@@ -24,7 +24,7 @@ from typing import Optional, Dict, Any, List, Tuple, Generator
 import psutil
 from flask import (
     Flask, render_template, request, redirect, 
-    url_for, session, jsonify, Response, g
+    url_for, session, jsonify, Response, stream_with_context
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -37,6 +37,7 @@ class Config:
     BASE_DIR = Path(__file__).resolve().parent
     SERVERS_ROOT = BASE_DIR / 'servers'
     DATA_DIR = BASE_DIR / 'data'
+    TEMPLATES_DIR = BASE_DIR / 'templates'
     
     USERS_FILE = DATA_DIR / 'users.json'
     SERVERS_FILE = DATA_DIR / 'servers.json'
@@ -49,13 +50,13 @@ class Config:
     ADMIN_PASSWORD = "JAGWAR12345"
     SECRET_KEY = 'jagwar-host-production-secret-2026'
     
-    SESSION_LIFETIME = 86400  # 24 hours
-    MAX_UPLOAD_SIZE = 100 * 1024 * 1024  # 100MB
+    SESSION_LIFETIME = 86400
+    MAX_UPLOAD_SIZE = 100 * 1024 * 1024
     MAX_CONSOLE_BUFFER = 10000
     
     @classmethod
     def init_directories(cls):
-        for directory in [cls.SERVERS_ROOT, cls.DATA_DIR]:
+        for directory in [cls.SERVERS_ROOT, cls.DATA_DIR, cls.TEMPLATES_DIR]:
             directory.mkdir(parents=True, exist_ok=True)
 
 # ============================================================================
@@ -157,12 +158,10 @@ class ProcessManager:
             while True:
                 time.sleep(5)
                 with self.registry_lock:
-                    dead_keys = []
                     for key, proc_data in self.registry.items():
                         process = proc_data.get('process')
                         if process and process.poll() is not None:
                             proc_data['status'] = 'stopped'
-                            dead_keys.append(key)
         threading.Thread(target=monitor_loop, daemon=True).start()
     
     def get_server_path(self, username: str, server_name: str) -> Path:
@@ -193,42 +192,37 @@ class ProcessManager:
             if not venv_path.exists():
                 result = subprocess.run(
                     [sys.executable, '-m', 'venv', '--copies', str(venv_path)],
-                    capture_output=True,
-                    text=True,
-                    timeout=120
+                    capture_output=True, text=True, timeout=120
                 )
                 if result.returncode != 0:
                     return False, f"Failed to create venv: {result.stderr}"
                 
                 pip_path = self.get_venv_pip(username, server_name)
-                subprocess.run(
-                    [str(pip_path), 'install', '--upgrade', 'pip'],
-                    capture_output=True,
-                    timeout=60
-                )
+                subprocess.run([str(pip_path), 'install', '--upgrade', 'pip'], capture_output=True, timeout=60)
             
             main_py = server_path / 'main.py'
             if not main_py.exists():
-                main_py.write_text('''#!/usr/bin/env python3
-"""JAGWAR HOST Application"""
+                main_py.write_text(f'''#!/usr/bin/env python3
+"""JAGWAR HOST - {server_name}"""
 import sys, time
 from datetime import datetime
 
 def main():
     print("=" * 50)
-    print(f"JAGWAR HOST Server Started")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"  JAGWAR HOST Server: {server_name}")
+    print(f"  Owner: {username}")
+    print(f"  Started: {{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}}")
     print("=" * 50)
     counter = 0
     try:
         while True:
             counter += 1
-            print(f"[{datetime.now().strftime('%H:%M:%S')}] Heartbeat #{counter}")
+            print(f"[{{datetime.now().strftime('%H:%M:%S')}}] Heartbeat #{{counter}}")
             time.sleep(5)
     except KeyboardInterrupt:
-        print("\\nShutting down...")
+        print("\\nShutting down gracefully...")
     except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
+        print(f"Error: {{e}}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
@@ -239,7 +233,6 @@ if __name__ == "__main__":
                 req_file.write_text("# Add your dependencies here\n", encoding='utf-8')
             
             return True, "Server environment created successfully"
-            
         except subprocess.TimeoutExpired:
             return False, "Virtual environment creation timed out"
         except Exception as e:
@@ -256,16 +249,9 @@ if __name__ == "__main__":
         try:
             result = subprocess.run(
                 [str(pip_path), 'install', '-r', str(req_file)],
-                capture_output=True,
-                text=True,
-                timeout=300,
-                cwd=str(server_path)
+                capture_output=True, text=True, timeout=300, cwd=str(server_path)
             )
-            
-            if result.returncode == 0:
-                return True, "Dependencies installed successfully"
-            else:
-                return False, result.stderr
+            return result.returncode == 0, result.stderr if result.returncode != 0 else "Dependencies installed"
         except subprocess.TimeoutExpired:
             return False, "Dependency installation timed out"
         except Exception as e:
@@ -273,7 +259,6 @@ if __name__ == "__main__":
     
     def start_server(self, username: str, server_name: str) -> Tuple[bool, str]:
         key = f"{username}_{server_name}"
-        
         self.stop_server(username, server_name)
         
         server_path = self.get_server_path(username, server_name)
@@ -282,7 +267,7 @@ if __name__ == "__main__":
         if not venv_python.exists():
             return False, "Virtual environment not found"
         
-        dep_success, dep_msg = self.install_dependencies(username, server_name)
+        self.install_dependencies(username, server_name)
         
         try:
             env = os.environ.copy()
@@ -292,35 +277,21 @@ if __name__ == "__main__":
             
             process = subprocess.Popen(
                 [str(venv_python), '-u', str(server_path / 'main.py')],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                bufsize=1,
-                cwd=str(server_path),
-                env=env,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True, bufsize=1, cwd=str(server_path), env=env,
                 preexec_fn=os.setsid if platform.system() != 'Windows' else None
             )
             
             with self.registry_lock:
                 self.registry[key] = {
-                    'process': process,
-                    'pid': process.pid,
-                    'start_time': time.time(),
-                    'status': 'running',
-                    'username': username,
-                    'server_name': server_name,
+                    'process': process, 'pid': process.pid,
+                    'start_time': time.time(), 'status': 'running',
+                    'username': username, 'server_name': server_name,
                     'output_queue': queue.Queue(maxsize=Config.MAX_CONSOLE_BUFFER)
                 }
-                
-                reader_thread = threading.Thread(
-                    target=self._read_output,
-                    args=(key, process),
-                    daemon=True
-                )
-                reader_thread.start()
+                threading.Thread(target=self._read_output, args=(key, process), daemon=True).start()
             
-            return True, f"Server started successfully (PID: {process.pid})"
-            
+            return True, f"Server started (PID: {process.pid})"
         except Exception as e:
             return False, str(e)
     
@@ -338,29 +309,24 @@ if __name__ == "__main__":
                             except:
                                 pass
             process.stdout.close()
-        except Exception:
+        except:
             pass
     
     def stop_server(self, username: str, server_name: str) -> Tuple[bool, str]:
         key = f"{username}_{server_name}"
-        
         with self.registry_lock:
             if key not in self.registry:
-                return False, "Server is not running"
-            
+                return False, "Server not running"
             proc_data = self.registry[key]
             process = proc_data.get('process')
-            
             if not process or process.poll() is not None:
                 del self.registry[key]
-                return True, "Server was already stopped"
-            
+                return True, "Already stopped"
             try:
                 if platform.system() != 'Windows':
                     os.killpg(os.getpgid(process.pid), signal.SIGTERM)
                 else:
                     process.terminate()
-                
                 try:
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
@@ -369,13 +335,8 @@ if __name__ == "__main__":
                     else:
                         process.kill()
                     process.wait(timeout=2)
-                
-                exit_code = process.returncode
                 proc_data['status'] = 'stopped'
-                proc_data['exit_code'] = exit_code
-                
-                return True, f"Server stopped (exit code: {exit_code})"
-                
+                return True, "Server stopped"
             except Exception as e:
                 return False, str(e)
     
@@ -386,77 +347,55 @@ if __name__ == "__main__":
     
     def get_process_info(self, username: str, server_name: str) -> Dict[str, Any]:
         key = f"{username}_{server_name}"
-        info = {
-            'running': False,
-            'pid': None,
-            'cpu_percent': 0.0,
-            'memory_mb': 0.0,
-            'uptime_seconds': 0,
-            'status': 'stopped',
-            'exit_code': None
-        }
-        
+        info = {'running': False, 'pid': None, 'cpu_percent': 0.0, 'memory_mb': 0.0, 'uptime_seconds': 0, 'status': 'stopped'}
         with self.registry_lock:
             if key in self.registry:
                 proc_data = self.registry[key]
                 process = proc_data.get('process')
-                
                 if process and process.poll() is None:
                     try:
                         p = psutil.Process(process.pid)
-                        info['running'] = True
-                        info['pid'] = process.pid
-                        info['cpu_percent'] = round(p.cpu_percent(interval=0.1), 2)
-                        mem_info = p.memory_info()
-                        info['memory_mb'] = round(mem_info.rss / (1024 * 1024), 2)
-                        info['uptime_seconds'] = int(time.time() - proc_data['start_time'])
-                        info['status'] = proc_data.get('status', 'running')
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
-                        info['status'] = 'terminated'
-                        info['exit_code'] = process.poll()
-                else:
-                    info['exit_code'] = process.poll() if process else proc_data.get('exit_code')
-        
+                        info.update(running=True, pid=process.pid,
+                                   cpu_percent=round(p.cpu_percent(interval=0.1), 2),
+                                   memory_mb=round(p.memory_info().rss/1024/1024, 2),
+                                   uptime_seconds=int(time.time()-proc_data['start_time']),
+                                   status='running')
+                    except:
+                        pass
         return info
     
     def generate_console_stream(self, username: str, server_name: str) -> Generator[str, None, None]:
         key = f"{username}_{server_name}"
-        
         while True:
             with self.registry_lock:
                 if key not in self.registry:
                     yield f"data: [SERVER_NOT_RUNNING]\n\n"
                     break
-                
                 proc_data = self.registry[key]
                 process = proc_data.get('process')
                 q = proc_data.get('output_queue')
-                
                 if process and process.poll() is not None:
                     while q and not q.empty():
                         try:
-                            line = q.get_nowait()
-                            yield f"data: {line}\n\n"
+                            yield f"data: {q.get_nowait()}\n\n"
                         except queue.Empty:
                             break
                     yield f"data: [PROCESS_ENDED]\n\n"
                     break
-                
                 if q:
-                    temp_lines = []
+                    lines = []
                     while not q.empty():
                         try:
-                            temp_lines.append(q.get_nowait())
+                            lines.append(q.get_nowait())
                         except queue.Empty:
                             break
-                    for line in temp_lines:
+                    for line in lines:
                         yield f"data: {line}\n\n"
-                    for line in temp_lines:
+                    for line in lines:
                         try:
                             q.put_nowait(line)
                         except queue.Full:
                             pass
-            
             time.sleep(0.1)
 
 # ============================================================================
@@ -472,62 +411,44 @@ class FileManager:
     @classmethod
     def is_safe_path(cls, base_path: Path, target_path: Path) -> bool:
         try:
-            resolved_base = base_path.resolve()
-            resolved_target = target_path.resolve()
-            return resolved_target.is_relative_to(resolved_base)
-        except (ValueError, AttributeError):
-            return str(resolved_base) in str(resolved_target) and str(resolved_target).startswith(str(resolved_base))
+            return target_path.resolve().is_relative_to(base_path.resolve())
+        except:
+            return str(base_path.resolve()) in str(target_path.resolve()) and str(target_path.resolve()).startswith(str(base_path.resolve()))
     
     @classmethod
     def list_directory(cls, username: str, server_name: str, subpath: str = '') -> List[Dict[str, Any]]:
         server_path = cls.get_server_path(username, server_name)
         target_path = server_path / subpath if subpath else server_path
-        
-        if not target_path.exists():
+        if not target_path.exists() or not cls.is_safe_path(server_path, target_path):
             return []
-        
-        if not cls.is_safe_path(server_path, target_path):
-            return []
-        
         items = []
         try:
             for entry in sorted(target_path.iterdir()):
                 if entry.name in cls.BLOCKED_NAMES or entry.name.startswith('.'):
                     continue
-                
                 rel_path = str(entry.relative_to(server_path))
                 stat = entry.stat()
-                
                 items.append({
-                    'name': entry.name,
-                    'path': rel_path,
+                    'name': entry.name, 'path': rel_path,
                     'type': 'directory' if entry.is_dir() else 'file',
                     'size': stat.st_size if entry.is_file() else 0,
                     'modified': datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                    'editable': entry.suffix.lower() in {
-                        '.py', '.js', '.html', '.css', '.json', '.txt', '.md',
-                        '.yml', '.yaml', '.cfg', '.ini', '.conf', '.sh', '.xml', '.csv'
-                    }
+                    'editable': entry.suffix.lower() in {'.py','.js','.html','.css','.json','.txt','.md','.yml','.yaml','.cfg','.ini','.conf','.sh','.xml','.csv'}
                 })
         except PermissionError:
             pass
-        
         return items
     
     @classmethod
     def read_file(cls, username: str, server_name: str, filepath: str) -> Tuple[Optional[str], Optional[str]]:
         server_path = cls.get_server_path(username, server_name)
         target_file = server_path / filepath
-        
         if not target_file.exists() or not target_file.is_file():
             return None, "File not found"
-        
         if not cls.is_safe_path(server_path, target_file):
             return None, "Access denied"
-        
         try:
-            content = target_file.read_text(encoding='utf-8')
-            return content, None
+            return target_file.read_text(encoding='utf-8'), None
         except Exception as e:
             return None, str(e)
     
@@ -535,14 +456,12 @@ class FileManager:
     def write_file(cls, username: str, server_name: str, filepath: str, content: str) -> Tuple[bool, str]:
         server_path = cls.get_server_path(username, server_name)
         target_file = server_path / filepath
-        
         if not cls.is_safe_path(server_path, target_file):
             return False, "Access denied"
-        
         try:
             target_file.parent.mkdir(parents=True, exist_ok=True)
             target_file.write_text(content, encoding='utf-8')
-            return True, "File saved successfully"
+            return True, "File saved"
         except Exception as e:
             return False, str(e)
     
@@ -550,13 +469,10 @@ class FileManager:
     def create_file(cls, username: str, server_name: str, filepath: str) -> Tuple[bool, str]:
         server_path = cls.get_server_path(username, server_name)
         target_file = server_path / filepath
-        
         if not cls.is_safe_path(server_path, target_file):
             return False, "Access denied"
-        
         if target_file.exists():
-            return False, "File already exists"
-        
+            return False, "File exists"
         try:
             target_file.parent.mkdir(parents=True, exist_ok=True)
             target_file.touch()
@@ -568,13 +484,10 @@ class FileManager:
     def create_directory(cls, username: str, server_name: str, dirpath: str) -> Tuple[bool, str]:
         server_path = cls.get_server_path(username, server_name)
         target_dir = server_path / dirpath
-        
         if not cls.is_safe_path(server_path, target_dir):
             return False, "Access denied"
-        
         if target_dir.exists():
-            return False, "Directory already exists"
-        
+            return False, "Directory exists"
         try:
             target_dir.mkdir(parents=True, exist_ok=True)
             return True, "Directory created"
@@ -585,22 +498,18 @@ class FileManager:
     def delete_item(cls, username: str, server_name: str, itempath: str) -> Tuple[bool, str]:
         server_path = cls.get_server_path(username, server_name)
         target_path = server_path / itempath
-        
         if not cls.is_safe_path(server_path, target_path):
             return False, "Access denied"
-        
         if not target_path.exists():
-            return False, "Item not found"
-        
+            return False, "Not found"
         if target_path.name in cls.BLOCKED_NAMES:
-            return False, "Cannot delete protected item"
-        
+            return False, "Protected"
         try:
             if target_path.is_dir():
                 shutil.rmtree(target_path)
             else:
                 target_path.unlink()
-            return True, "Deleted successfully"
+            return True, "Deleted"
         except Exception as e:
             return False, str(e)
     
@@ -609,20 +518,16 @@ class FileManager:
         server_path = cls.get_server_path(username, server_name)
         source = server_path / old_path
         destination = server_path / new_path
-        
         if not cls.is_safe_path(server_path, source) or not cls.is_safe_path(server_path, destination):
             return False, "Access denied"
-        
         if not source.exists():
-            return False, "Source item not found"
-        
+            return False, "Not found"
         if destination.exists():
-            return False, "Destination already exists"
-        
+            return False, "Target exists"
         try:
             destination.parent.mkdir(parents=True, exist_ok=True)
             source.rename(destination)
-            return True, "Renamed successfully"
+            return True, "Renamed"
         except Exception as e:
             return False, str(e)
     
@@ -630,36 +535,27 @@ class FileManager:
     def upload_file(cls, username: str, server_name: str, file, subpath: str = '') -> Tuple[bool, str]:
         server_path = cls.get_server_path(username, server_name)
         upload_dir = server_path / subpath if subpath else server_path
-        
         if not cls.is_safe_path(server_path, upload_dir):
             return False, "Access denied"
-        
         if not file or not file.filename:
-            return False, "No file selected"
-        
+            return False, "No file"
         from werkzeug.utils import secure_filename
         filename = secure_filename(file.filename)
         if not filename:
             return False, "Invalid filename"
-        
         try:
             upload_dir.mkdir(parents=True, exist_ok=True)
             file.save(str(upload_dir / filename))
-            return True, f"File '{filename}' uploaded successfully"
+            return True, f"Uploaded: {filename}"
         except Exception as e:
             return False, str(e)
     
     @classmethod
     def get_disk_usage(cls, username: str, server_name: str) -> Dict[str, Any]:
         server_path = cls.get_server_path(username, server_name)
-        
         if not server_path.exists():
             return {'total_size': 0, 'file_count': 0, 'dir_count': 0}
-        
-        total_size = 0
-        file_count = 0
-        dir_count = 0
-        
+        total_size = file_count = dir_count = 0
         try:
             for entry in server_path.rglob('*'):
                 if entry.name in cls.BLOCKED_NAMES:
@@ -671,12 +567,7 @@ class FileManager:
                     dir_count += 1
         except PermissionError:
             pass
-        
-        return {
-            'total_size': total_size,
-            'file_count': file_count,
-            'dir_count': dir_count
-        }
+        return {'total_size': total_size, 'file_count': file_count, 'dir_count': dir_count}
 
 # ============================================================================
 # AUDIT LOGGING
@@ -719,20 +610,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
-def admin_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'user' not in session:
-            if request.path.startswith('/api/'):
-                return jsonify({'error': 'Authentication required'}), 401
-            return redirect(url_for('login_page'))
-        if session.get('user') != Config.ADMIN_USERNAME:
-            if request.path.startswith('/api/'):
-                return jsonify({'error': 'Admin access required'}), 403
-            abort(403)
-        return f(*args, **kwargs)
-    return decorated
-
 # ============================================================================
 # CREATE FLASK APP
 # ============================================================================
@@ -743,7 +620,6 @@ app.config['SECRET_KEY'] = Config.SECRET_KEY
 app.config['MAX_CONTENT_LENGTH'] = Config.MAX_UPLOAD_SIZE
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=Config.SESSION_LIFETIME)
 
-# Initialize managers
 process_manager = ProcessManager()
 file_manager = FileManager()
 users_db = JSONDatabase(Config.USERS_FILE)
@@ -751,7 +627,6 @@ servers_db = JSONDatabase(Config.SERVERS_FILE)
 logs_db = JSONDatabase(Config.LOGS_FILE)
 audit = AuditLogger(logs_db)
 
-# Ensure admin user exists
 if not users_db.find_one(username=Config.ADMIN_USERNAME):
     users_db.insert({
         'username': Config.ADMIN_USERNAME,
@@ -761,49 +636,65 @@ if not users_db.find_one(username=Config.ADMIN_USERNAME):
         'email': 'admin@jagwar.host',
         'servers_count': 0
     })
+    print(f"✅ Admin user created: {Config.ADMIN_USERNAME}")
 
 # ============================================================================
 # ROUTES - PUBLIC
 # ============================================================================
 @app.route('/')
 def landing():
+    print(f"🏠 Landing page - Session: {session.get('user', 'None')}")
+    if 'user' in session:
+        if session['user'] == Config.ADMIN_USERNAME:
+            return redirect(url_for('admin_panel'))
+        return redirect(url_for('dashboard'))
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
+    print(f"🔑 Login page - Method: {request.method}, Session: {session.get('user', 'None')}")
+    
+    if 'user' in session:
+        if session['user'] == Config.ADMIN_USERNAME:
+            return redirect(url_for('admin_panel'))
+        return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()
         
+        print(f"🔑 Login attempt: {username}")
+        
         if not username or not password:
             return render_template('login.html', error="Username and password required")
         
-        # Admin login
         if username == Config.ADMIN_USERNAME and password == Config.ADMIN_PASSWORD:
             session.clear()
             session['user'] = username
             session['tier'] = 'admin'
+            session['is_admin'] = True
             session.permanent = True
             audit.log(username, 'login', 'success', {'method': 'admin'})
+            print(f"✅ Admin login successful: {username}")
             return redirect(url_for('admin_panel'))
         
-        # User login
         user = users_db.find_one(username=username)
         if not user:
             audit.log(username, 'login', 'failed', {'reason': 'user_not_found'})
             return render_template('login.html', error="Invalid credentials")
         
         if not user.get('is_active', True):
-            audit.log(username, 'login', 'failed', {'reason': 'disabled'})
             return render_template('login.html', error="Account disabled")
         
         if check_password_hash(user['password_hash'], password):
             session.clear()
             session['user'] = username
             session['tier'] = user.get('tier', 'free')
+            session['is_admin'] = False
             session.permanent = True
             users_db.update(user['id'], {'last_login': datetime.now().isoformat()})
             audit.log(username, 'login', 'success')
+            print(f"✅ User login successful: {username}")
             return redirect(url_for('dashboard'))
         else:
             audit.log(username, 'login', 'failed', {'reason': 'wrong_password'})
@@ -825,23 +716,25 @@ def logout():
 @login_required
 def dashboard():
     username = session['user']
+    print(f"📊 Dashboard: {username}")
+    
     if username == Config.ADMIN_USERNAME:
         return redirect(url_for('admin_panel'))
     
     user = users_db.find_one(username=username)
-    servers = servers_db.query(username=username)
+    if not user:
+        session.clear()
+        return redirect(url_for('login_page'))
     
-    # Enrich with process info
+    servers = servers_db.query(username=username)
     for s in servers:
         s['process_info'] = process_manager.get_process_info(username, s['name'])
     
     max_servers = Config.MAX_PREMIUM_SERVERS if user.get('tier') == 'premium' else Config.MAX_DEFAULT_SERVERS
     
     return render_template('dashboard.html', 
-                          username=username, 
-                          servers=servers, 
-                          max_servers=max_servers,
-                          tier=user.get('tier', 'free'))
+                          username=username, servers=servers, 
+                          max_servers=max_servers, tier=user.get('tier', 'free'))
 
 @app.route('/create_server', methods=['POST'])
 @login_required
@@ -864,22 +757,17 @@ def create_server():
     if servers_db.exists(username=username, name=server_name):
         return jsonify({'error': 'Server already exists'}), 400
     
-    # Create environment
     success, msg = process_manager.create_server_environment(username, server_name)
     if not success:
         return jsonify({'error': msg}), 500
     
-    # Save server record
     servers_db.insert({
-        'username': username,
-        'name': server_name,
-        'language': 'python',
-        'status': 'stopped'
+        'username': username, 'name': server_name,
+        'language': 'python', 'status': 'stopped'
     })
     
     users_db.update(user['id'], {'servers_count': current + 1})
     audit.log(username, 'create_server', 'success', {'server': server_name})
-    
     return redirect(url_for('dashboard'))
 
 @app.route('/delete_server/<server_name>', methods=['POST'])
@@ -927,10 +815,8 @@ def server_control(server_name):
     disk = file_manager.get_disk_usage(username, server_name)
     
     return render_template('server_control.html', 
-                          server=server, 
-                          files=files, 
-                          disk_usage=disk,
-                          username=username)
+                          server=server, files=files, 
+                          disk_usage=disk, username=username)
 
 # ============================================================================
 # API - SERVER LIFECYCLE
@@ -942,11 +828,9 @@ def api_start_server(server_name):
     server = servers_db.find_one(username=username, name=server_name)
     if not server:
         return jsonify({'error': 'Server not found'}), 404
-    
     success, msg = process_manager.start_server(username, server_name)
     if success:
         servers_db.update(server['id'], {'status': 'running', 'last_started': datetime.now().isoformat()})
-    
     return jsonify({'success': success, 'message': msg})
 
 @app.route('/api/server/stop/<server_name>', methods=['POST'])
@@ -956,11 +840,9 @@ def api_stop_server(server_name):
     server = servers_db.find_one(username=username, name=server_name)
     if not server:
         return jsonify({'error': 'Server not found'}), 404
-    
     success, msg = process_manager.stop_server(username, server_name)
     if success:
         servers_db.update(server['id'], {'status': 'stopped'})
-    
     return jsonify({'success': success, 'message': msg})
 
 @app.route('/api/server/restart/<server_name>', methods=['POST'])
@@ -970,30 +852,20 @@ def api_restart_server(server_name):
     server = servers_db.find_one(username=username, name=server_name)
     if not server:
         return jsonify({'error': 'Server not found'}), 404
-    
     success, msg = process_manager.restart_server(username, server_name)
     if success:
         servers_db.update(server['id'], {'status': 'running'})
-    
     return jsonify({'success': success, 'message': msg})
 
 @app.route('/api/server/console/<server_name>')
 @login_required
 def api_console_stream(server_name):
     username = session['user']
-    
     def generate():
         for line in process_manager.generate_console_stream(username, server_name):
             yield line
-    
-    return Response(
-        stream_with_context(generate()),
-        mimetype='text/event-stream',
-        headers={
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive'
-        }
-    )
+    return Response(stream_with_context(generate()), mimetype='text/event-stream',
+                   headers={'Cache-Control': 'no-cache', 'Connection': 'keep-alive'})
 
 @app.route('/api/server/status/<server_name>')
 @login_required
@@ -1090,8 +962,19 @@ def api_upload_file(server_name):
 # ROUTES - ADMIN PANEL
 # ============================================================================
 @app.route('/admin')
-@admin_required
 def admin_panel():
+    print(f"🛡️ Admin panel - Session: {session}")
+    
+    if 'user' not in session:
+        print("❌ No session")
+        return redirect(url_for('login_page'))
+    
+    if session['user'] != Config.ADMIN_USERNAME:
+        print(f"❌ Not admin: {session['user']}")
+        return redirect(url_for('dashboard'))
+    
+    print(f"✅ Admin access: {session['user']}")
+    
     users = users_db.all()
     servers = servers_db.all()
     activity = audit.get_recent(100)
@@ -1109,14 +992,14 @@ def admin_panel():
     }
     
     return render_template('admin.html', 
-                          users=users, 
-                          servers=servers, 
-                          activity=activity,
-                          stats=stats)
+                          users=users, servers=servers, 
+                          activity=activity, stats=stats)
 
 @app.route('/admin/create_user', methods=['POST'])
-@admin_required
 def admin_create_user():
+    if 'user' not in session or session['user'] != Config.ADMIN_USERNAME:
+        return redirect(url_for('login_page'))
+    
     username = request.form.get('username', '').strip()
     password = request.form.get('password', '').strip()
     email = request.form.get('email', '').strip()
@@ -1140,8 +1023,10 @@ def admin_create_user():
     return redirect(url_for('admin_panel'))
 
 @app.route('/admin/toggle_premium/<username>', methods=['POST'])
-@admin_required
 def admin_toggle_premium(username):
+    if 'user' not in session or session['user'] != Config.ADMIN_USERNAME:
+        return redirect(url_for('login_page'))
+    
     user = users_db.find_one(username=username)
     if not user:
         return jsonify({'error': 'User not found'}), 404
@@ -1153,8 +1038,10 @@ def admin_toggle_premium(username):
     return redirect(url_for('admin_panel'))
 
 @app.route('/admin/delete_user/<username>', methods=['POST'])
-@admin_required
 def admin_delete_user(username):
+    if 'user' not in session or session['user'] != Config.ADMIN_USERNAME:
+        return redirect(url_for('login_page'))
+    
     if username == Config.ADMIN_USERNAME:
         return jsonify({'error': 'Cannot delete admin'}), 400
     
@@ -1162,7 +1049,6 @@ def admin_delete_user(username):
     if not user:
         return jsonify({'error': 'User not found'}), 404
     
-    # Delete all user servers
     user_servers = servers_db.query(username=username)
     for s in user_servers:
         process_manager.stop_server(username, s['name'])
@@ -1177,9 +1063,14 @@ def admin_delete_user(username):
         shutil.rmtree(user_dir, ignore_errors=True)
     
     users_db.delete(user['id'])
-    
     audit.log(session['user'], 'admin_delete_user', 'success', {'deleted': username})
     return redirect(url_for('admin_panel'))
+
+@app.route('/admin/activity')
+def admin_activity():
+    if 'user' not in session or session['user'] != Config.ADMIN_USERNAME:
+        return jsonify({'error': 'Unauthorized'}), 403
+    return jsonify({'activity': audit.get_recent(200)})
 
 # ============================================================================
 # ERROR HANDLERS
@@ -1189,12 +1080,6 @@ def not_found(e):
     if request.path.startswith('/api/'):
         return jsonify({'error': 'Not found'}), 404
     return render_template('index.html'), 404
-
-@app.errorhandler(500)
-def server_error(e):
-    if request.path.startswith('/api/'):
-        return jsonify({'error': 'Server error'}), 500
-    return render_template('index.html'), 500
 
 # ============================================================================
 # CONTEXT PROCESSOR
@@ -1210,5 +1095,11 @@ def inject_globals():
 # MAIN
 # ============================================================================
 if __name__ == '__main__':
-    import re
-    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
+    print(f"""
+╔══════════════════════════════════════════╗
+║   ⚡ JAGWAR HOST v{Config.APP_VERSION}                  ⚡
+║   Admin: {Config.ADMIN_USERNAME}                     ║
+║   Pass:  {Config.ADMIN_PASSWORD}                ║
+╚══════════════════════════════════════════╝
+    """)
+    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
