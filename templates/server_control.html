@@ -1000,4 +1000,173 @@
                     showToast(data.error, 'error');
                     return;
                 }
-                document.getElementById('editor
+                document.getElementById('editor-textarea').value = data.content;
+                document.getElementById('editorModal').classList.add('active');
+            });
+        }
+
+        function closeEditor() {
+            document.getElementById('editorModal').classList.remove('active');
+            currentFile = null;
+        }
+
+        function saveFile() {
+            if (!currentFile) return;
+            const content = document.getElementById('editor-textarea').value;
+            
+            fetch(`/api/files/write/${serverName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: currentFile, content: content })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    showToast(data.error, 'error');
+                } else {
+                    showToast('File saved successfully!', 'success');
+                    closeEditor();
+                    loadFiles();
+                }
+            });
+        }
+
+        function createNewFile() {
+            const name = prompt('Enter file name:');
+            if (!name) return;
+            
+            fetch(`/api/files/create-file/${serverName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: name })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) showToast(data.error, 'error');
+                else {
+                    showToast('File created!', 'success');
+                    loadFiles();
+                }
+            });
+        }
+
+        function createNewFolder() {
+            const name = prompt('Enter folder name:');
+            if (!name) return;
+            
+            fetch(`/api/files/create-folder/${serverName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: name })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) showToast(data.error, 'error');
+                else {
+                    showToast('Folder created!', 'success');
+                    loadFiles();
+                }
+            });
+        }
+
+        function deleteItem(path) {
+            if (!confirm(`Delete "${path}"? This cannot be undone.`)) return;
+            
+            fetch(`/api/files/delete/${serverName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: path })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) showToast(data.error, 'error');
+                else {
+                    showToast('Deleted!', 'success');
+                    loadFiles();
+                }
+            });
+        }
+
+        function renameItem(oldPath) {
+            const newName = prompt('Enter new name:', oldPath);
+            if (!newName || newName === oldPath) return;
+            
+            fetch(`/api/files/rename/${serverName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ old_path: oldPath, new_path: newName })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) showToast(data.error, 'error');
+                else {
+                    showToast('Renamed!', 'success');
+                    loadFiles();
+                }
+            });
+        }
+
+        function uploadFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch(`/api/files/upload/${serverName}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) showToast(data.error, 'error');
+                else {
+                    showToast('Uploaded!', 'success');
+                    loadFiles();
+                }
+            });
+            
+            input.value = '';
+        }
+
+        // ========== TOAST ==========
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // ========== INITIALIZATION ==========
+        function init() {
+            startConsoleStream();
+            loadFiles();
+            updateStatus();
+            setInterval(updateStatus, 3000);
+            setInterval(loadFiles, 10000);
+            
+            // Close editor on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeEditor();
+            });
+            
+            // Close editor on overlay click
+            document.getElementById('editorModal').addEventListener('click', function(e) {
+                if (e.target === this) closeEditor();
+            });
+        }
+
+        init();
+
+        console.log(`JAGWAR HOST - Server Control: ${serverName}`);
+    </script>
+</body>
+</html>
