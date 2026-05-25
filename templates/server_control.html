@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ server.name }} - JAGWAR Control Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #0077ff;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 80px 2rem 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: #0077ff;
+            border-bottom: 2px solid #0077ff;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Console */
+        .console-container {
+            background: #0a0a0a;
+            border-radius: 15px;
+            border: 1px solid #0077ff;
+            overflow: hidden;
+        }
+
+        .console-header {
+            background: #1a1a1a;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #0077ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .console-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .console-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .console-btn.start { background: rgba(0, 255, 0, 0.2); color: #00ff00; }
+        .console-btn.stop { background: rgba(255, 0, 0, 0.2); color: #ff4444; }
+        .console-btn.restart { background: rgba(255, 165, 0, 0.2); color: #ffaa00; }
+
+        .console-output {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0077ff;
+        }
+
+        /* File Manager */
+        .file-manager {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 1rem;
+        }
+
+        .file-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .file-path {
+            background: #1a1a1a;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-family: monospace;
+        }
+
+        .file-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .file-item:hover {
+            background: rgba(0, 119, 255, 0.1);
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .file-actions button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.2rem 0.5rem;
+        }
+
+        .file-actions button:hover { transform: scale(1.1); }
+
+        /* Modal Editor */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #0077ff;
+        }
+
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 0.5rem;
+            resize: none;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        button {
+            background: linear-gradient(135deg, #0077ff, #0055cc);
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
+        .btn-success { background: linear-gradient(135deg, #00cc44, #008833); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">JAGWAR<span style="color:#ff6600">CP</span> | {{ server.name }}</div>
+        <div>
+            <button onclick="window.location.href='/dashboard'">← Dashboard</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Server Stats -->
+        <div class="stats-panel">
+            <div class="stat-item">
+                <div class="stat-value" id="cpu-usage">{{ server.usage_cpu }}%</div>
+                <div class="stat-label">CPU Usage</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="ram-usage">{{ server.usage_memory }}%</div>
+                <div class="stat-label">RAM Usage</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="server-status" style="color: {% if server.status == 'running' %}#00ff00{% else %}#ff4444{% endif %};">
+                    {{ server.status|upper }}
+                </div>
+                <div class="stat-label">Status</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ server.language }}</div>
+                <div class="stat-label">Language</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('console')">💻 Console</button>
+            <button class="tab-btn" onclick="switchTab('files')">📁 Files</button>
+        </div>
+
+        <!-- Console Tab -->
+        <div id="console-tab" class="tab-content active">
+            <div class="console-container">
+                <div class="console-header">
+                    <span>📟 Real Console Output</span>
+                    <div class="console-actions">
+                        <button class="console-btn start" onclick="controlServer('start')">▶ START</button>
+                        <button class="console-btn stop" onclick="controlServer('stop')">⏹ STOP</button>
+                        <button class="console-btn restart" onclick="controlServer('restart')">🔄 RESTART</button>
+                    </div>
+                </div>
+                <div class="console-output" id="console-output">
+                    Waiting for server commands...
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Tab -->
+        <div id="files-tab" class="tab-content">
+            <div class="file-manager">
+                <div class="file-toolbar">
+                    <button onclick="createFile()">📄 New File</button>
+                    <button onclick="createFolder()">📁 New Folder</button>
+                    <button onclick="uploadFile()">📤 Upload File</button>
+                    <button onclick="uploadFolder()">📂 Upload Folder</button>
+                </div>
+                <div class="file-path" id="current-path">/</div>
+                <div class="file-list" id="file-list">
+                    <div class="file-item">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            جميع الحقوق محفوظة JAGWAR 2026
+        </div>
+    </div>
+
+    <!-- File Editor Modal -->
+    <div id="editor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="editor-filename">Editing file...</span>
+                <button onclick="closeEditor()">✖</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editor-content" spellcheck="false"></textarea>
+            </div>
+            <div style="padding: 1rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                <button onclick="saveFile()" class="btn-success">💾 Save</button>
+                <button onclick="closeEditor()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPath = '';
+        let currentEditingFile = null;
+        let consoleInterval = null;
+
+        // Switch Tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            if (tab === 'console') {
+                document.getElementById('console-tab').classList.add('active');
+                document.querySelector('.tab-btn:first-child').classList.add('active');
+                startConsoleRefresh();
+            } else {
+                document.getElementById('files-tab').classList.add('active');
+                document.querySelector('.tab-btn:last-child').classList.add('active');
+                if (consoleInterval) clearInterval(consoleInterval);
+                loadFiles();
+            }
+        }
+
+        // Server Control
+        async function controlServer(action) {
+            const response = await fetch(`/api/server/{{ server_id }}/${action}`, { method: 'POST' });
+            const data = await response.json();
+            
+            if (data.success) {
+                alert(`${action.toUpperCase()} successful!`);
+                refreshStatus();
+                if (action === 'start') {
+                    setTimeout(() => refreshConsole(), 1000);
+                }
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        }
+
+        async function refreshStatus() {
+            const response = await fetch('/api/server/{{ server_id }}/console');
+            const data = await response.json();
+            // Update status from console data if needed
+        }
+
+        async function refreshConsole() {
+            const response = await fetch('/api/server/{{ server_id }}/console');
+            const data = await response.json();
+            const consoleDiv = document.getElementById('console-output');
+            consoleDiv.innerHTML = data.console || 'No output yet...';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function startConsoleRefresh() {
+            if (consoleInterval) clearInterval(consoleInterval);
+            refreshConsole();
+            consoleInterval = setInterval(refreshConsole, 2000);
+        }
+
+        // File Manager
+        async function loadFiles(path = '') {
+            currentPath = path;
+            const response = await fetch(`/api/server/{{ server_id }}/files?path=${encodeURIComponent(path)}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                document.getElementById('file-list').innerHTML = `<div class="file-item">Error: ${data.error}</div>`;
+                return;
+            }
+            
+            document.getElementById('current-path').innerHTML = `/ ${path}`;
+            
+            const fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+            
+            // Add parent directory link
+            if (path) {
+                const parentPath = path.split('/').slice(0, -1).join('/');
+                const parentDiv = document.createElement('div');
+                parentDiv.className = 'file-item';
+                parentDiv.innerHTML = `
+                    <div class="file-name">📁 ..</div>
+                    <button onclick="loadFiles('${parentPath}')">Open</button>
+                `;
+                fileList.appendChild(parentDiv);
+            }
+            
+            for (const file of data.files) {
+                const icon = file.is_dir ? '📁' : (file.name.endsWith('.py') ? '🐍' : '📄');
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file-item';
+                fileDiv.innerHTML = `
+                    <div class="file-name">
+                        ${icon} ${file.name}
+                        <span style="font-size: 0.7rem; color: #666;">${file.is_dir ? '' : (file.size/1024).toFixed(1) + ' KB'}</span>
+                    </div>
+                    <div class="file-actions">
+                        ${file.is_dir ? `<button onclick="loadFiles('${file.path}')">Open</button>` : `<button onclick="editFile('${file.path}')">✏️ Edit</button>`}
+                        <button onclick="renameItem('${file.path}')">✏️ Rename</button>
+                        <button onclick="deleteItem('${file.path}')" style="color: #ff4444;">🗑️ Delete</button>
+                    </div>
+                `;
+                fileList.appendChild(fileDiv);
+            }
+        }
+
+        async function editFile(filePath) {
+            currentEditingFile = filePath;
+            const response = await fetch(`/api/server/{{ server_id }}/file?path=${encodeURIComponent(filePath)}`);
+            const data = await response.json();
+            
+            document.getElementById('editor-filename').innerHTML = `✏️ Editing: ${filePath}`;
+            document.getElementById('editor-content').value = data.content || '';
+            document.getElementById('editor-modal').style.display = 'flex';
+        }
+
+        async function saveFile() {
+            const content = document.getElementById('editor-content').value;
+            await fetch(`/api/server/{{ server_id }}/file?path=${encodeURIComponent(currentEditingFile)}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: content })
+            });
+            closeEditor();
+            loadFiles(currentPath);
+            alert('File saved!');
+        }
+
+        function closeEditor() {
+            document.getElementById('editor-modal').style.display = 'none';
+            currentEditingFile = null;
+        }
+
+        async function createFile() {
+            const fileName = prompt('Enter file name (e.g., main.py):');
+            if (!fileName) return;
+            
+            const filePath = currentPath ? `${currentPath}/${fileName}` : fileName;
+            await fetch(`/api/server/{{ server_id }}/file?path=${encodeURIComponent(filePath)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: '# New file created\n' })
+            });
+            loadFiles(currentPath);
+        }
+
+        async function createFolder() {
+            const folderName = prompt('Enter folder name:');
+            if (!folderName) return;
+            
+            await fetch(`/api/server/{{ server_id }}/folder`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: currentPath, name: folderName })
+            });
+            loadFiles(currentPath);
+        }
+
+        async function deleteItem(filePath) {
+            if (!confirm(`Delete ${filePath}?`)) return;
+            
+            await fetch(`/api/server/{{ server_id }}/file?path=${encodeURIComponent(filePath)}`, { method: 'DELETE' });
+            loadFiles(currentPath);
+        }
+
+        async function renameItem(filePath) {
+            const newName = prompt('Enter new name:', filePath.split('/').pop());
+            if (!newName) return;
+            
+            await fetch(`/api/server/{{ server_id }}/rename`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ old_path: filePath, new_name: newName })
+            });
+            loadFiles(currentPath);
+        }
+
+        function uploadFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('path', currentPath);
+                
+                await fetch(`/api/server/{{ server_id }}/upload`, { method: 'POST', body: formData });
+                loadFiles(currentPath);
+            };
+            input.click();
+        }
+
+        function uploadFolder() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.webkitdirectory = true;
+            input.onchange = async (e) => {
+                const files = Array.from(e.target.files);
+                for (const file of files) {
+                    const relativePath = file.webkitRelativePath;
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('path', currentPath);
+                    await fetch(`/api/server/{{ server_id }}/upload`, { method: 'POST', body: formData });
+                }
+                loadFiles(currentPath);
+                alert(`Uploaded ${files.length} files`);
+            };
+            input.click();
+        }
+
+        // Start with console tab
+        startConsoleRefresh();
+
+        // Auto refresh stats
+        setInterval(() => {
+            fetch('/api/server/{{ server_id }}/console')
+                .then(res => res.json())
+                .then(data => {
+                    // Update status if needed
+                });
+        }, 5000);
+    </script>
+</body>
+</html>
